@@ -3,13 +3,13 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe Riddler::Base, '#call' do
   before(:each) do
     @base = Riddler::Base.new
-    
     RestClient.stub!(:get).and_return('body')
   end
   
   context "(v2 method)" do
     before(:each) do
       @api_url = 'http://api.viddler.com/api/v2/viddler.api.getInfo.xml'
+      @base.stub!(:method_is_v2?).and_return(true)
     end
     
     it "should call RestClient.get with proper url" do
@@ -21,6 +21,7 @@ describe Riddler::Base, '#call' do
   context "(v1 method)" do
     before(:each) do
       @api_url = 'http://api.viddler.com/rest/v1/'
+      @base.stub!(:method_is_v2?).and_return(false)
     end
   
     it "should call RestClient.get with proper url" do
