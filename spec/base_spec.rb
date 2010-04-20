@@ -36,7 +36,9 @@ describe Riddler::Base, '#call' do
   end
   
   context "with parameters" do
-    it "should pass parameters to method" do
+    it "should pass parameters to RestClient.get" do
+      RestClient.should_receive(:get).with(anything, hash_including(:username => "kyleslat"))
+      @base.call('viddler.users.getProfile', :username => "kyleslat")
     end
   end
 end
