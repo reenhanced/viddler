@@ -1,8 +1,8 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
-describe Riddler::Base, '#call' do
+describe Riddler::Client, '#call' do
   before(:each) do
-    @base = Riddler::Base.new
+    @base = Riddler::Client.new
     RestClient.stub!(:get).and_return('body')
   end
   

@@ -1,5 +1,5 @@
 module Riddler
-  class Base
+  class Client
     def call(method, params = {})
       if method_is_v2?(method)
         endpoint = "http://api.viddler.com/api/v2/#{method}.xml"

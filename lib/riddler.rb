@@ -1,5 +1,5 @@
 require 'rest_client'
-require 'riddler/base'
+require 'riddler/client'
 
 module Riddler
   V2_METHODS = [
