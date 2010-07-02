@@ -2,7 +2,6 @@
 require 'bundler'
 Bundler.setup
 
-require 'rest_client'
-require 'json'
+require 'httparty'
 
 require 'riddler/client'
