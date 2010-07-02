@@ -9,8 +9,14 @@ module Riddler
       self.api_key = api_key
     end
     
-    def get(method, params)
-      Riddler::Client.get("/#{method}.json", {:key => self.api_key}.merge(params))
+    def get(method, params={})
+      params.merge!(:key => self.api_key)
+      Riddler::Client.get("/#{method}.json", :query => params)
+    end
+    
+    def post(method, params={})
+      params.merge!(:key => self.api_key)
+      Riddler::Client.post("/#{method}.json", :query => params)
     end
   end
 end
