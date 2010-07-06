@@ -1,5 +1,20 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
+describe Riddler::Client, "configuration" do
+  before(:each) do
+    @api_key = '318037e122bc94ce894b594c45534c415479'
+    @client = Riddler::Client.new(@api_key)
+  end
+  
+  it "should allow endpoint to be set" do
+    lambda {@client.endpoint = "http://some/other/endpoint"}.should_not raise_error
+  end
+  
+  it "should have correct default endpoint" do
+    @client.endpoint.should == "http://api.viddler.com/api/v2"
+  end
+end
+
 describe Riddler::Client, ".new" do
   context "with API key" do
     before(:each) do
@@ -9,7 +24,7 @@ describe Riddler::Client, ".new" do
   
     it "should set API key" do
       @client.api_key.should == @api_key
-    end
+    end    
   end
   
   context "without API key" do
@@ -31,7 +46,7 @@ describe Riddler::Client, ".get" do
   
   context "mock expectations" do
     it "should call Riddler::Client.get with proper method and extension" do
-      Riddler::Client.should_receive(:get).with('/viddler.api.getInfo.json', anything)
+      Riddler::Client.should_receive(:get).with('http://api.viddler.com/api/v2/viddler.api.getInfo.json', anything)
     end
 
     it "should include API key for Riddler::Client.get" do
@@ -40,6 +55,11 @@ describe Riddler::Client, ".get" do
     
     it "should include additional args for Riddler::Client.get" do
       Riddler::Client.should_receive(:get).with(anything, :query => hash_including(:a => "b", :c => "d"))
+    end
+    
+    it "should use custom endpoint if set" do
+      @client.endpoint = "http://some/endpoint"
+      Riddler::Client.should_receive(:get).with(/http:\/\/some\/endpoint\//, anything())
     end
     
     after(:each) do
@@ -60,7 +80,7 @@ describe Riddler::Client, ".post" do
   
   context "mock expectations" do
     it "should call Riddler::Client.post with proper method and extension" do
-      Riddler::Client.should_receive(:post).with('/viddler.encoding.setOptions.json', anything)
+      Riddler::Client.should_receive(:post).with('http://api.viddler.com/api/v2/viddler.encoding.setOptions.json', anything)
     end
     
     it "should include API key for Riddler::Client.post" do
@@ -69,6 +89,11 @@ describe Riddler::Client, ".post" do
     
     it "should include additional args for Riddler::Client.post" do
       Riddler::Client.should_receive(:post).with(anything, :query => hash_including(:a => "b", :c => "d"))
+    end
+    
+    it "should use custom endpoint if set" do
+      @client.endpoint = "http://some/endpoint"
+      Riddler::Client.should_receive(:post).with(/http:\/\/some\/endpoint\//, anything())
     end
     
     after(:each) do
