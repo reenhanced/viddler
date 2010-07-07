@@ -6,3 +6,4 @@ Bundler.setup
 require 'httparty'
 
 require 'riddler/client'
+require 'riddler/playlists'
