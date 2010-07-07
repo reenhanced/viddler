@@ -13,3 +13,20 @@ describe Riddler::Playlists, ".new" do
     Riddler::Playlists.new(@client).client.should == @client
   end
 end
+
+describe Riddler::Playlists, "#new" do
+  before(:each) do
+    @client = mock(Riddler::Client)
+    @valid_options = {
+      :title => "New playlist",
+      :type  => "smart",
+      :sort  => "uploaded-desc"
+    }
+    
+    @playlists = Riddler::Playlists.new(@client)
+  end
+  
+  it "should require title" do
+    lambda {@playlists.new(@valid_options.merge(:title => nil))}.should raise_error(Riddler::Exceptions::ArgumentError)
+  end
+end

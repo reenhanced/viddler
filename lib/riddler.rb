@@ -7,3 +7,4 @@ require 'httparty'
 
 require 'riddler/client'
 require 'riddler/playlists'
+require 'riddler/exceptions'
