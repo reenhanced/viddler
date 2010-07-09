@@ -1,7 +1,5 @@
 module Riddler
   class Client
-    include HTTParty
-    
     attr_accessor :api_key, :endpoint
     
     def initialize(api_key)
@@ -17,12 +15,12 @@ module Riddler
     # Standard Client Methods
     def get(method, params={}, cookies={})
       params.merge!(:key => self.api_key)
-      Riddler::Client.get("#{self.endpoint}/#{method}.json", :query => params, :cookies => cookies)
+      JSON.parse(RestClient.get("#{self.endpoint}/#{method}.json", :params => params, :cookies => cookies))
     end
     
     def post(method, params={}, cookies={})
       params.merge!(:key => self.api_key)
-      Riddler::Client.post("#{self.endpoint}/#{method}.json", :query => params, :cookies => cookies)
+      JSON.parse(RestClient.post("#{self.endpoint}/#{method}.json", :params => params, :cookies => cookies))
     end
   end
 end

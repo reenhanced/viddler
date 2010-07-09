@@ -1,6 +1,7 @@
 source "http://rubygems.org"
 
-gem "httparty"
+gem "rest-client"
+gem "json"
 
 group :test do
   gem "rspec"
