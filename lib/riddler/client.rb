@@ -7,11 +7,6 @@ module Riddler
       self.endpoint = 'http://api.viddler.com/api/v2'
     end
     
-    # Namespaces
-    def playlists
-      Riddler::Playlists.new(self)
-    end
-    
     # Standard Client Methods
     def get(method, params={}, cookies={})
       params.merge!(:key => self.api_key)

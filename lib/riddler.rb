@@ -7,5 +7,4 @@ require 'rest-client'
 require 'json'
 
 require 'riddler/client'
-require 'riddler/playlists'
 require 'riddler/exceptions'

@@ -123,22 +123,3 @@ describe Riddler::Client, ".post" do
     end
   end
 end
-
-describe Riddler::Client, "#playlists" do
-  before(:each) do
-    @api_key = '318037e122bc94ce894b594c45534c415479'
-    @client = Riddler::Client.new(@api_key)
-    
-    @playlists = mock(Riddler::Playlists)
-    Riddler::Playlists.stub!(:new).and_return(@playlists)
-  end
-  
-  it "should return result of Riddler::Playlists.new" do
-    @client.playlists.should == @playlists
-  end
-  
-  it "should pass self to Riddler::Playlists.new" do
-    Riddler::Playlists.should_receive(:new).with(@client)
-    @client.playlists
-  end
-end
