@@ -50,11 +50,11 @@ describe Riddler::Client, ".get" do
     end
 
     it "should include API key for Riddler::Client.get" do
-      Riddler::Client.should_receive(:get).with(anything, :query => hash_including(:key => @api_key))
+      Riddler::Client.should_receive(:get).with(anything, hash_including(:query => hash_including(:key => @api_key)))
     end
     
     it "should include additional args for Riddler::Client.get" do
-      Riddler::Client.should_receive(:get).with(anything, :query => hash_including(:a => "b", :c => "d"))
+      Riddler::Client.should_receive(:get).with(anything, hash_including(:query => hash_including(:a => "b", :c => "d")))
     end
     
     it "should use custom endpoint if set" do
@@ -62,8 +62,12 @@ describe Riddler::Client, ".get" do
       Riddler::Client.should_receive(:get).with(/http:\/\/some\/endpoint\//, anything())
     end
     
+    it "should pass along cookies if set" do
+      Riddler::Client.should_receive(:get).with(anything, hash_including(:cookies => {:c => 1}))
+    end
+    
     after(:each) do
-      @client.get('viddler.api.getInfo', {:a => "b", :c => "d"})
+      @client.get('viddler.api.getInfo', {:a => "b", :c => "d"}, {:c => 1})
     end
   end
 end
@@ -84,11 +88,11 @@ describe Riddler::Client, ".post" do
     end
     
     it "should include API key for Riddler::Client.post" do
-      Riddler::Client.should_receive(:post).with(anything, :query => hash_including(:key => @api_key))
+      Riddler::Client.should_receive(:post).with(anything, hash_including(:query => hash_including(:key => @api_key)))
     end
     
     it "should include additional args for Riddler::Client.post" do
-      Riddler::Client.should_receive(:post).with(anything, :query => hash_including(:a => "b", :c => "d"))
+      Riddler::Client.should_receive(:post).with(anything, hash_including(:query => hash_including(:a => "b", :c => "d")))
     end
     
     it "should use custom endpoint if set" do
@@ -96,8 +100,12 @@ describe Riddler::Client, ".post" do
       Riddler::Client.should_receive(:post).with(/http:\/\/some\/endpoint\//, anything())
     end
     
+    it "should pass along cookies if set" do
+      Riddler::Client.should_receive(:post).with(anything, hash_including(:cookies => {:c => 1}))
+    end
+    
     after(:each) do
-      @client.post('viddler.encoding.setOptions', {:a => "b", :c => "d"})
+      @client.post('viddler.encoding.setOptions', {:a => "b", :c => "d"}, {:c => 1})
     end
   end
 end
