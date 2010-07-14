@@ -40,6 +40,54 @@ describe Riddler::Client, ".new" do
   end
 end
 
+describe Riddler::Client, "authentication" do
+  before(:each) do
+    @api_key = "abc123"
+    @client = Riddler::Client.new(@api_key)
+    
+    @success = {
+      'auth' => {
+        'sessionid'    => 'asdf',
+        'record_token' => 'fdsa'
+      }
+    }
+    
+    @client.stub!(:get).and_return(@success)
+  end
+  
+  context "#authenticate!" do
+    it "should call #post with username and password" do
+      @client.should_receive(:get).with('viddler.users.auth', hash_including(:user => 'kyleslat', :password => '123'))
+      @client.authenticate!('kyleslat', '123')
+    end
+    
+    it "should set authenticated? to true if successful" do
+      @client.authenticate!('kyleslat', '123')
+      @client.should be_authenticated
+    end
+    
+    it "should set sessionid" do
+      @client.authenticate!('kyleslat', '123')
+      @client.sessionid.should == 'asdf'
+    end
+    
+    it "should return false if unsuccessful" do
+      @client.stub!(:get).and_raise(RestClient::Forbidden)
+      @client.authenticate!('bad', 'user').should be_false
+    end
+    
+    it "should not be authenticated? if unsuccessful" do
+      @client.stub!(:get).and_raise(RestClient::Forbidden)
+      @client.authenticate!('bad', 'user')
+      @client.should_not be_authenticated
+    end
+  end
+  
+  it "should not be authenticated? if authenticate! has not been called" do
+    @client.authenticated?.should == false
+  end
+end
+
 describe Riddler::Client, ".get" do
   before(:each) do
     @api_key = '318037e122bc94ce894b594c45534c415479'
@@ -104,24 +152,24 @@ describe Riddler::Client, ".post" do
   
   context "mock expectations" do
     it "should call Riddler::Client.post with proper method and extension" do
-      RestClient.should_receive(:post).with('http://api.viddler.com/api/v2/viddler.encoding.setOptions.json', anything)
+      RestClient.should_receive(:post).with('http://api.viddler.com/api/v2/viddler.encoding.setOptions.json', anything, anything)
     end
     
     it "should include API key for Riddler::Client.post" do
-      RestClient.should_receive(:post).with(anything, hash_including(:params => hash_including(:key => @api_key)))
+      RestClient.should_receive(:post).with(anything, hash_including(:key => @api_key), anything)
     end
     
     it "should include additional args for Riddler::Client.post" do
-      RestClient.should_receive(:post).with(anything, hash_including(:params => hash_including(:a => "b", :c => "d")))
+      RestClient.should_receive(:post).with(anything, hash_including(:a => "b", :c => "d"), anything)
     end
     
     it "should use custom endpoint if set" do
       @client.endpoint = "http://some/endpoint"
-      RestClient.should_receive(:post).with(/http:\/\/some\/endpoint\//, anything())
+      RestClient.should_receive(:post).with(/http:\/\/some\/endpoint\//, anything, anything)
     end
     
     it "should pass along cookies if set" do
-      RestClient.should_receive(:post).with(anything, hash_including(:cookies => {:c => 1}))
+      RestClient.should_receive(:post).with(anything, anything, hash_including(:cookies => {:c => 1}))
     end
     
     after(:each) do

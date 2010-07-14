@@ -1,6 +1,6 @@
 module Riddler
   class Client
-    attr_accessor :api_key, :endpoint
+    attr_accessor :api_key, :endpoint, :sessionid
     
     def initialize(api_key=Riddler::Client.api_key)
       raise Riddler::Exceptions::MissingApiKey if api_key.nil?
@@ -17,7 +17,19 @@ module Riddler
     
     def post(method, params={}, cookies={})
       params.merge!(:key => self.api_key)
-      JSON.parse(RestClient.post("#{self.endpoint}/#{method}.json", :params => params, :cookies => cookies))
+      JSON.parse(RestClient.post("#{self.endpoint}/#{method}.json", params, {:cookies => cookies}))
+    end
+    
+    # Authentication
+    def authenticate!(username, password)
+      response = self.get('viddler.users.auth', :user => username, :password => password)
+      self.sessionid = response['auth']['sessionid']
+    rescue RestClient::Forbidden
+      false
+    end
+    
+    def authenticated?
+      !self.sessionid.nil?
     end
     
     def self.api_key=(key)
