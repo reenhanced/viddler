@@ -22,14 +22,20 @@ describe Riddler::Client, ".new" do
       @client = Riddler::Client.new(@api_key)
     end
   
-    it "should set API key" do
+    it "should set API key if given" do
       @client.api_key.should == @api_key
     end    
   end
   
   context "without API key" do
-    it "should require API key" do
-      lambda {Riddler::Client.new()}.should raise_error(ArgumentError)
+    it "should use Riddler::Client.api_key if it exists" do
+      Riddler::Client.api_key = "abc123"
+      Riddler::Client.new.api_key.should == "abc123"
+    end
+    
+    it "should raise MissingApiKey exception if Riddler::Client.api_key is blank" do
+      Riddler::Client.api_key = nil
+      lambda {Riddler::Client.new}.should raise_error(Riddler::Exceptions::MissingApiKey)
     end
   end
 end
@@ -121,5 +127,15 @@ describe Riddler::Client, ".post" do
     after(:each) do
       @client.post('viddler.encoding.setOptions', {:a => "b", :c => "d"}, {:c => 1})
     end
+  end
+end
+
+describe Riddler::Client, ".api_key" do
+  before(:each) do
+    Riddler::Client.api_key = "abc123"
+  end
+  
+  it "should set the api key" do
+    Riddler::Client.api_key.should == "abc123"
   end
 end
