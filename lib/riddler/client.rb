@@ -2,10 +2,12 @@ module Riddler
   class Client
     attr_accessor :api_key, :endpoint, :sessionid
     
-    def initialize(api_key=Riddler::Client.api_key)
-      raise Riddler::Exceptions::MissingApiKey if api_key.nil?
+    def initialize(options={})
+      options = {:api_key => Riddler::Client.api_key}.merge(options)
       
-      self.api_key = api_key
+      raise Riddler::Exceptions::MissingApiKey if options[:api_key].nil?
+      
+      self.api_key = options[:api_key]
       self.endpoint = 'http://api.viddler.com/api/v2'
     end
     
@@ -37,7 +39,7 @@ module Riddler
     end
     
     def self.api_key
-      @@api_key
+      @@api_key ||= nil
     end
   end
 end

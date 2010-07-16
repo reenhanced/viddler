@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 describe Riddler::Client, "configuration" do
   before(:each) do
     @api_key = '318037e122bc94ce894b594c45534c415479'
-    @client = Riddler::Client.new(@api_key)
+    @client = Riddler::Client.new(:api_key => @api_key)
   end
   
   it "should allow endpoint to be set" do
@@ -19,7 +19,7 @@ describe Riddler::Client, ".new" do
   context "with API key" do
     before(:each) do
       @api_key = '318037e122bc94ce894b594c45534c415479'
-      @client = Riddler::Client.new(@api_key)
+      @client = Riddler::Client.new(:api_key => @api_key)
     end
   
     it "should set API key if given" do
@@ -43,7 +43,7 @@ end
 describe Riddler::Client, "authentication" do
   before(:each) do
     @api_key = "abc123"
-    @client = Riddler::Client.new(@api_key)
+    @client = Riddler::Client.new(:api_key => @api_key)
     
     @success = {
       'auth' => {
@@ -91,7 +91,7 @@ end
 describe Riddler::Client, ".get" do
   before(:each) do
     @api_key = '318037e122bc94ce894b594c45534c415479'
-    @client = Riddler::Client.new(@api_key)
+    @client = Riddler::Client.new(:api_key => @api_key)
     RestClient.stub!(:get).and_return("{\"viddler_api\":{\"version\":\"2.2.0\"}}")
   end
   
@@ -136,7 +136,7 @@ end
 describe Riddler::Client, ".post" do
   before(:each) do
     @api_key = '318037e122bc94ce894b594c45534c415479'
-    @client = Riddler::Client.new(@api_key)
+    @client = Riddler::Client.new(:api_key => @api_key)
     RestClient.stub!(:post).and_return("{\"viddler_api\":{\"version\":\"2.2.0\"}}")
   end
   
