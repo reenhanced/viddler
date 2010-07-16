@@ -16,9 +16,12 @@ describe Riddler::Client, "configuration" do
 end
 
 describe Riddler::Client, ".new" do
+  before(:each) do
+    @api_key = '318037e122bc94ce894b594c45534c415479'
+  end
+  
   context "with API key" do
     before(:each) do
-      @api_key = '318037e122bc94ce894b594c45534c415479'
       @client = Riddler::Client.new(:api_key => @api_key)
     end
   
@@ -36,6 +39,26 @@ describe Riddler::Client, ".new" do
     it "should raise MissingApiKey exception if Riddler::Client.api_key is blank" do
       Riddler::Client.api_key = nil
       lambda {Riddler::Client.new}.should raise_error(Riddler::Exceptions::MissingApiKey)
+    end
+  end
+  
+  context "with session id" do
+    before(:each) do
+      @client = Riddler::Client.new(:api_key => @api_key, :session_id => "abc123")
+    end
+    
+    it "should set @client.session_id" do
+      @client.session_id.should == "abc123"
+    end
+  end
+  
+  context "with session cookie" do
+    before(:each) do
+      @client = Riddler::Client.new(:api_key => @api_key, :session_cookie => {'a' => 'b'})
+    end
+    
+    it "should set @client.session_cookie" do
+      @client.session_cookie.should == {'a' => 'b'}
     end
   end
 end
@@ -66,9 +89,9 @@ describe Riddler::Client, "authentication" do
       @client.should be_authenticated
     end
     
-    it "should set sessionid" do
+    it "should set session_id" do
       @client.authenticate!('kyleslat', '123')
-      @client.sessionid.should == 'asdf'
+      @client.session_id.should == 'asdf'
     end
     
     it "should return false if unsuccessful" do
@@ -127,6 +150,16 @@ describe Riddler::Client, ".get" do
       RestClient.should_receive(:get).with(anything, hash_including(:cookies => {:c => 1}))
     end
     
+    it "should pass along session_id if client has session" do
+      @client.session_id = 'abc123'
+      RestClient.should_receive(:get).with(anything, hash_including(:params => hash_including(:sessionid => 'abc123')))
+    end
+    
+    it "should pass along session cookies if client has session" do
+      @client.session_cookie = {:a => 'b'}
+      RestClient.should_receive(:get).with(anything, hash_including(:cookies => hash_including(:a => 'b')))
+    end
+    
     after(:each) do
       @client.get('viddler.api.getInfo', {:a => "b", :c => "d"}, {:c => 1})
     end
@@ -172,9 +205,41 @@ describe Riddler::Client, ".post" do
       RestClient.should_receive(:post).with(anything, anything, hash_including(:cookies => {:c => 1}))
     end
     
+    it "should pass along session_id if client has session" do
+      @client.session_id = 'abc123'
+      RestClient.should_receive(:post).with(anything, hash_including(:sessionid => 'abc123'), anything)
+    end
+    
+    it "should pass along session cookies if client has session" do
+      @client.session_cookie = {:a => 'b'}
+      RestClient.should_receive(:post).with(anything, anything, hash_including(:cookies => hash_including(:a => 'b')))
+    end
+    
     after(:each) do
       @client.post('viddler.encoding.setOptions', {:a => "b", :c => "d"}, {:c => 1})
     end
+  end
+end
+
+describe Riddler::Client, "#has_session?" do
+  before(:each) do
+    @client = Riddler::Client.new(:api_key => 'abc123')
+  end
+  
+  it "should return true if session_id is set" do
+    @client.session_id = "123"
+    @client.should have_session
+  end
+  
+  it "should return true if session_cookie is set" do
+    @client.session_cookie = {:a => 'b'}
+    @client.should have_session
+  end
+  
+  it "should return false if session_id is nil and session_cookie is empty" do
+    @client.session_id = nil
+    @client.session_cookie = {}
+    @client.should_not have_session
   end
 end
 
