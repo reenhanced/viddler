@@ -55,6 +55,7 @@ module Riddler
     protected
     
     def add_session_params(params)
+      params ||= {}
       session_params = {}
       
       session_params[:key]       = self.api_key
@@ -64,8 +65,8 @@ module Riddler
     end
     
     def add_session_cookie(cookies)
-      cook = session_cookie || nil
-      cook.merge(cookies)
+      cookies ||= {}
+      session_cookie.merge(cookies)
     end
   end
 end
