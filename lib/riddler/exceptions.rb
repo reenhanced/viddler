@@ -8,6 +8,16 @@ module Riddler
       end
     end
     
-    class ApiError < ::StandardError; end
+    class ApiError < ::StandardError
+      attr_accessor :code, :description, :details
+      
+      def initialize(code, description, details)
+        self.code = code
+        self.description = description
+        self.details = details
+        
+        super("\##{code.to_s}: #{description.to_s} (#{details})")
+      end
+    end
   end
 end

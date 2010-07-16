@@ -60,7 +60,8 @@ module Riddler
     
     def raise_api_error(exception)
       resp = JSON.parse(exception.response)
-      raise Riddler::Exceptions::ApiError, "\##{resp['error']['code'].to_s}: #{resp['error']['description'].to_s} (#{resp['error']['details']})" if resp['error']
+      
+      raise Riddler::Exceptions::ApiError.new(resp['error']['code'], resp['error']['description'], resp['error']['details']) if resp['error']
       raise exception
     end
     
