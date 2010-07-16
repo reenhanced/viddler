@@ -64,7 +64,8 @@ module Riddler
     end
     
     def add_session_cookie(cookies)
-      session_cookie.merge(cookies)
+      cook = session_cookie || nil
+      cook.merge(cookies)
     end
   end
 end
