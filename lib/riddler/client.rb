@@ -11,12 +11,12 @@ module Riddler
     
     # Standard Client Methods
     def get(method, params={}, cookies={})
-      params.merge!(:key => self.api_key)
+      params = {:key => self.api_key}.merge(params)
       JSON.parse(RestClient.get("#{self.endpoint}/#{method}.json", :params => params, :cookies => cookies))
     end
     
     def post(method, params={}, cookies={})
-      params.merge!(:key => self.api_key)
+      params = {:key => self.api_key}.merge(params)
       JSON.parse(RestClient.post("#{self.endpoint}/#{method}.json", params, {:cookies => cookies}))
     end
     
