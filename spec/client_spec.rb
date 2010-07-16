@@ -128,6 +128,12 @@ describe Riddler::Client, ".get" do
     @client.get('viddler.api.getInfo').should == @response
   end
   
+  it "should raise Riddler::Exceptions::ApiError if an error is returned" do
+    error = RestClient::ExceptionWithResponse.new('{"error":{"code":"9","description":"session invalid","details":"details"}}')
+    RestClient.stub!(:get).and_raise(error)
+    lambda {@client.get('viddler.api.getInfo')}.should raise_error(Riddler::Exceptions::ApiError, "#9: session invalid (details)")
+  end
+  
   context "mock expectations" do
     it "should call Riddler::Client.get with proper method and extension" do
       RestClient.should_receive(:get).with('http://api.viddler.com/api/v2/viddler.api.getInfo.json', anything)
@@ -181,6 +187,12 @@ describe Riddler::Client, ".post" do
     @response = {'a' => 'b'}
     JSON.stub!(:parse).and_return(@response)
     @client.post('viddler.api.getInfo').should == @response
+  end
+  
+  it "should raise Riddler::Exceptions::ApiError if an error is returned" do
+    error = RestClient::ExceptionWithResponse.new('{"error":{"code":"9","description":"session invalid","details":"details"}}')
+    RestClient.stub!(:post).and_raise(error)
+    lambda {@client.post('viddler.api.getInfo')}.should raise_error(Riddler::Exceptions::ApiError, "#9: session invalid (details)")
   end
   
   context "mock expectations" do

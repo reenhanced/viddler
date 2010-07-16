@@ -19,6 +19,8 @@ module Riddler
       cookies = add_session_cookie(cookies)
       
       JSON.parse(RestClient.get("#{self.endpoint}/#{method}.json", :params => params, :cookies => cookies))
+    rescue RestClient::ExceptionWithResponse => e
+      raise_api_error(e)
     end
     
     def post(method, params={}, cookies={})
@@ -26,6 +28,8 @@ module Riddler
       cookies = add_session_cookie(cookies)
       
       JSON.parse(RestClient.post("#{self.endpoint}/#{method}.json", params, {:cookies => cookies}))
+    rescue RestClient::ExceptionWithResponse => e
+      raise_api_error(e)
     end
     
     # Authentication
@@ -53,6 +57,12 @@ module Riddler
     end
     
     protected
+    
+    def raise_api_error(exception)
+      resp = JSON.parse(exception.response)
+      raise Riddler::Exceptions::ApiError, "\##{resp['error']['code'].to_s}: #{resp['error']['description'].to_s} (#{resp['error']['details']})" if resp['error']
+      raise exception
+    end
     
     def add_session_params(params)
       params ||= {}
