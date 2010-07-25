@@ -2,7 +2,7 @@ require 'bundler'
 
 Gem::Specification.new do |s|
   s.name         = "riddler"
-  s.version      = "0.0.1"
+  s.version      = "0.1.0"
   s.author       = "Kyle Slattery"
   s.summary      = "Ruby wrapper for the Viddler API"
   s.email        = "kyle@viddler.com"
