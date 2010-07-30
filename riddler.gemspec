@@ -11,5 +11,7 @@ Gem::Specification.new do |s|
   s.files        = %w(README.md)
   s.files       += Dir.glob("lib/**/*")
   s.files       += Dir.glob("spec/**/*")
-  s.add_bundler_dependencies
+  
+  s.add_dependency "rest-client"
+  s.add_dependency "json"
 end
