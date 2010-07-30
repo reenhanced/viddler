@@ -39,3 +39,20 @@ describe Riddler::Base, "readable api attributes" do
     @test_obj.should respond_to(:description)
   end
 end
+
+describe Riddler::Base, ".new" do
+  before(:each) do
+    class NewTestObj < Riddler::Base
+      writable_api_attribute :title
+      readable_api_attribute :url
+    end
+  end
+  
+  it "should set writable attributes" do
+    NewTestObj.new(:title => "hello").title.should == "hello"
+  end
+  
+  it "should raise error if trying to set readable attributes" do
+    lambda {NewTestObj.new(:url => "http://asdf.com")}.should raise_error(Riddler::Exceptions::Models::ReadOnlyAttributeError, "url is read-only")
+  end
+end
