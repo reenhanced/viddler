@@ -81,4 +81,8 @@ describe Riddler::Base, ".attributes=" do
     @test_obj.send("attributes=", {:url => "http://asdf.com"}, true)
     @test_obj.url.should == "http://asdf.com"
   end
+  
+  it "should just ignore trying to set incorrect attributes" do
+    lambda {@test_obj.attributes = {:invalid_attribute => "invalid!"}}.should_not raise_error
+  end
 end
