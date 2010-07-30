@@ -61,6 +61,16 @@ describe Riddler::Client, ".new" do
       @client.session_cookie.should == {'a' => 'b'}
     end
   end
+  
+  context "with endpoint" do
+    before(:each) do
+      @client = Riddler::Client.new(:api_key => @api_key, :endpoint => "http://abc.com/api")
+    end
+    
+    it "should set endpoint" do
+      @client.endpoint.should == "http://abc.com/api"
+    end
+  end
 end
 
 describe Riddler::Client, "authentication" do
@@ -262,5 +272,20 @@ describe Riddler::Client, ".api_key" do
   
   it "should set the api key" do
     Riddler::Client.api_key.should == "abc123"
+  end
+end
+
+describe Riddler::Client, ".endpoint" do
+  before(:each) do
+    Riddler::Client.endpoint = nil
+  end  
+  
+  it "should set the endpoint" do
+    Riddler::Client.endpoint = "http://abc.com"
+    Riddler::Client.endpoint.should == "http://abc.com"
+  end
+  
+  it "should default to 'http://api.viddler.com/api/v2'" do
+    Riddler::Client.endpoint.should == 'http://api.viddler.com/api/v2'
   end
 end

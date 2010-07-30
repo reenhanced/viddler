@@ -1,5 +1,7 @@
 module Riddler
   class Client
+    DEFAULT_ENDPOINT = 'http://api.viddler.com/api/v2'
+    
     attr_accessor :api_key, :endpoint, :session_id, :session_cookie
     
     def initialize(options={})
@@ -9,8 +11,7 @@ module Riddler
       self.api_key        = options[:api_key]
       self.session_id     = options[:session_id] unless options[:session_id].nil?
       self.session_cookie = options[:session_cookie] || {}
-      
-      self.endpoint = 'http://api.viddler.com/api/v2'
+      self.endpoint       = options[:endpoint] || Riddler::Client.endpoint
     end
     
     # Standard Client Methods
@@ -54,6 +55,14 @@ module Riddler
     
     def self.api_key
       @@api_key ||= nil
+    end
+    
+    def self.endpoint=(ep)
+      @@endpoint = ep
+    end
+    
+    def self.endpoint
+      @@endpoint ||= DEFAULT_ENDPOINT
     end
     
     protected
