@@ -46,6 +46,8 @@ describe Riddler::Base, ".new" do
       writable_api_attribute :title
       readable_api_attribute :url
     end
+    
+    @session = mock(Riddler::Session)
   end
   
   it "should set writable attributes" do
@@ -54,6 +56,18 @@ describe Riddler::Base, ".new" do
   
   it "should raise error if trying to set readable attributes" do
     lambda {NewTestObj.new(:url => "http://asdf.com")}.should raise_error(Riddler::Exceptions::Models::ReadOnlyAttributeError, "url is read-only")
+  end
+  
+  it "should accept only a session" do
+    Riddler::Base.new(@session).session.should == @session
+  end
+  
+  it "should set set session if session and attributes are passed" do
+    NewTestObj.new(@session, :title => "My Title").session.should == @session
+  end
+  
+  it "should set attributes if session and attributes are passed" do
+    NewTestObj.new(@session, :title => "My Title").title.should == "My Title"
   end
 end
 

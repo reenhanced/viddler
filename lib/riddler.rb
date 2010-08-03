@@ -9,5 +9,6 @@ require 'json'
 require 'riddler/client'
 require 'riddler/exceptions'
 
-require 'riddler/models/exceptions.rb'
-require 'riddler/models/base.rb'
+require 'riddler/models/exceptions'
+require 'riddler/models/base'
+require 'riddler/models/session'

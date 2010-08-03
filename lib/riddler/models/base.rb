@@ -1,7 +1,10 @@
 module Riddler
   class Base
-    def initialize(attrs={})
-      self.attributes = attrs
+    attr_accessor :session
+    
+    def initialize(*args)
+      self.session = args.shift unless args.first.is_a?(Hash)
+      self.attributes = args.first || {}
     end
     
     # Class Attribute Methods
