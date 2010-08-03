@@ -3,7 +3,13 @@ module Riddler
     attr_accessor :session
     
     def initialize(*args)
-      self.session = args.shift unless args.first.is_a?(Hash)
+      raise ArgumentError, "too many arguments to initialize" if args.length > 2      
+      if args.length == 2 || (args.length == 1 && !args.first.is_a?(Hash))
+        self.session = args.shift
+      else
+        self.session = Riddler::Session.new
+      end
+      
       self.attributes = args.first || {}
     end
     

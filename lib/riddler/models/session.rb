@@ -1,4 +1,4 @@
 module Riddler
-  class Session < Riddler::Base
+  class Session
   end
 end

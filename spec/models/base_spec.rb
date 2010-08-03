@@ -69,6 +69,10 @@ describe Riddler::Base, ".new" do
   it "should set attributes if session and attributes are passed" do
     NewTestObj.new(@session, :title => "My Title").title.should == "My Title"
   end
+  
+  it "should set session if not provided" do
+    Riddler::Base.new.session.should_not be_nil
+  end
 end
 
 describe Riddler::Base, ".attributes=" do
