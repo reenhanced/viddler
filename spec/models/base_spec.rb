@@ -5,7 +5,8 @@ describe Riddler::Base, "writable api attributes" do
     class WritableTestObj < Riddler::Base
       writable_api_attribute :title, :description
     end
-    
+
+    Riddler::Client.api_key = "1"
     @test_obj = WritableTestObj.new
   end
   
@@ -26,6 +27,7 @@ describe Riddler::Base, "readable api attributes" do
       readable_api_attribute :title, :description
     end
     
+    Riddler::Client.api_key = "1"
     @test_obj = ReadableTestObj.new
   end
   
@@ -46,7 +48,8 @@ describe Riddler::Base, ".new" do
       writable_api_attribute :title
       readable_api_attribute :url
     end
-    
+
+    Riddler::Client.api_key = "1"
     @session = mock(Riddler::Session)
   end
   
@@ -82,6 +85,7 @@ describe Riddler::Base, ".attributes=" do
       readable_api_attribute :url
     end
     
+    Riddler::Client.api_key = "1"
     @test_obj = AttributesEqualsTestObj.new
   end
   
