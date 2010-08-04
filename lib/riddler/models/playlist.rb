@@ -1,28 +1,33 @@
 module Riddler
   class Playlist < Riddler::Base
-    writable_api_attribute :id, :type, :name
+    attr_reader :id, :name, :type, :videos
     
-    def initialize(session, attrs={})
-      super(session, attrs)
+    def initialize(session, response={})
+      @videos ||= []
+      
+      return unless response['list_result']
+      
+      if response['list_result']['playlist']
+        playlist_attrs = response['list_result']['playlist']
+
+        @id   = playlist_attrs['id']
+        @name = playlist_attrs['name']
+        @type = playlist_attrs['type']
+      end
+      
+      if response['list_result']['videos_list']
+        videos_list = response['list_result']['videos_list']
+        
+        videos_list.each do |vid|
+          @videos << Riddler::Video.new(session, vid)
+        end
+      end
     end
     
-    def save
-      attributes = {
-        :name => self.name,
-        :type => self.type
-      }
-      
-      populate_from_api_response!(self.session.client.post("viddler.playlists.create", attributes))
+    def self.create!(session, attrs)
+      Riddler::Playlist.new(session, session.client.post("viddler.playlists.create", attrs))
     end
     
     protected
-    
-    def populate_from_api_response!(response)
-      playlist  = response["list_result"]["playlist"]
-
-      self.id   = playlist["id"]
-      self.type = playlist["type"]
-      self.name = playlist["name"]
-    end
   end
 end
