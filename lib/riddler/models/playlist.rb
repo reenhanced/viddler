@@ -17,7 +17,8 @@ module Riddler
     end
     
     def self.create!(session, attrs)
-      Riddler::Playlist.new(session, session.client.post("viddler.playlists.create", attrs))
+      klass = attrs[:type] == 'smart' ? Riddler::SmartPlaylist : Riddler::RegularPlaylist
+      klass.new(session, session.client.post("viddler.playlists.create", attrs))
     end
     
     protected
