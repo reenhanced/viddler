@@ -3,7 +3,7 @@ module Riddler
     attr_reader :id, :name, :type, :videos
     
     def initialize(session, response={})
-      @videos ||= []
+      @videos = VideoList.new(session, response)
       
       return unless response['list_result']
       
@@ -13,14 +13,6 @@ module Riddler
         @id   = playlist_attrs['id']
         @name = playlist_attrs['name']
         @type = playlist_attrs['type']
-      end
-      
-      if response['list_result']['videos_list']
-        videos_list = response['list_result']['videos_list']
-        
-        videos_list.each do |vid|
-          @videos << Riddler::Video.new(session, vid)
-        end
       end
     end
     

@@ -76,10 +76,9 @@ describe Riddler::Playlist, ".new" do
     
     @session = mock(Riddler::Session)
     
-    @video1 = mock(Riddler::Video)
-    @video2 = mock(Riddler::Video)
+    @video_list = mock(Riddler::VideoList)
     
-    Riddler::Video.stub!(:new).and_return(@video1, @video2)
+    Riddler::VideoList.stub!(:new).and_return(@video_list)
     
     @playlist = Riddler::Playlist.new(@session, @response)    
   end
@@ -104,13 +103,12 @@ describe Riddler::Playlist, ".new" do
     @playlist.type.should == "regular"
   end
   
-  it "calls Video.new with session and videos" do
-    Riddler::Video.should_receive(:new).with(@session, @video1_response).once
-    Riddler::Video.should_receive(:new).with(@session, @video2_response).once
+  it "calls VideoList.new with @session and @response" do
+    Riddler::VideoList.should_receive(:new).with(@session, @response)
     @playlist = Riddler::Playlist.new(@session, @response)
   end
   
   it "assigns videos" do
-    @playlist.videos.should == [@video1, @video2]
+    @playlist.videos.should == @video_list
   end
 end
