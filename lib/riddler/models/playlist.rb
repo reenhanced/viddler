@@ -17,6 +17,15 @@ module Riddler
       self.new_with_proper_class(session, response)
     end
     
+    def self.add_video(session, playlist_id, video_id)
+      response = session.client.post("viddler.playlists.addVideo", {
+        :playlist_id => playlist_id,
+        :video_id    => video_id
+      })
+      
+      self.new_with_proper_class(session, response)
+    end
+    
     def self.move_video(session, playlist_id, from_index, to_index)
       response = session.client.get("viddler.playlists.moveVideo", {
         :playlist_id => playlist_id,

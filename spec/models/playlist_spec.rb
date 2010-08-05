@@ -430,3 +430,56 @@ describe Riddler::Playlist, ".remove_video" do
     Riddler::Playlist.remove_video(@session, "abc123", "4")
   end
 end
+
+describe Riddler::Playlist, ".add_video" do
+  before(:each) do
+    @video1_response = {
+      "id" => "video1",
+      "title" => "Video 1"
+    }
+  
+    @video2_response = {
+      "id" => "video2",
+      "title" => "Video 2"
+    }
+  
+    @response = {
+      "list_result" => {
+        "page" => "1",
+        "per_page" => "10",
+        "playlist" => {
+          "id" => "abc123",
+          "name" => "My new playlist",
+        },
+      
+        "videos_list" => [@video2_response, @video1_response]
+      }
+    }
+    
+    @client = mock(Riddler::Client)
+    @client.stub!(:post).and_return(@response)
+
+    @session = mock(Riddler::Session, :client => @client)
+    
+    @playlist = mock(Riddler::RegularPlaylist)
+    Riddler::RegularPlaylist.stub!(:new).and_return(@playlist)
+  end
+  
+  it "requires session, playlist_id, video_id" do
+    lambda {Riddler::Playlist.add_video}.should raise_error(ArgumentError, /0 for 3/)
+  end
+  
+  it "calls post viddler.playlists.addVideo with session and params" do
+    @client.should_receive(:post).with("viddler.playlists.addVideo", hash_including(:playlist_id => "abc123", :video_id => "123abc"))
+    Riddler::Playlist.add_video(@session, "abc123", "123abc")
+  end
+  
+  it "returns value of Riddler::RegularPlaylist.new" do
+    Riddler::Playlist.add_video(@session, "abc123", "123abc").should == @playlist
+  end
+  
+  it "calls Riddler::RegularPlaylist.new with session and response" do
+    Riddler::RegularPlaylist.should_receive(:new).with(@session, @response)
+    Riddler::Playlist.add_video(@session, "abc123", "123abc")
+  end
+end
