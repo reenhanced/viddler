@@ -12,6 +12,11 @@ module Riddler
       klass.new(session, session.client.post("viddler.playlists.create", attrs))
     end
     
+    def self.find(session, id)
+      response = session.client.get("viddler.playlists.getDetails", :playlist_id => id)
+      Riddler::Playlist.new(session, response)
+    end
+    
     def update_attributes!(attributes)
       attributes[:playlist_id] = self.id
       populate_from_response! self.session.client.post('viddler.playlists.setDetails', attributes)

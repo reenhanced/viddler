@@ -201,3 +201,58 @@ describe Riddler::Playlist, "#update_attributes!" do
     @playlist.name.should == "New name"
   end
 end
+
+describe Riddler::Playlist, ".find" do
+  before(:each) do
+    @video1_response = {
+      "id" => "video1",
+      "title" => "Video 1"
+    }
+  
+    @video2_response = {
+      "id" => "video2",
+      "title" => "Video 2"
+    }
+  
+    @response = {
+      "list_result" => {
+        "page" => "1",
+        "per_page" => "10",
+        "playlist" => {
+          "id" => "abc123",
+          "name" => "My new playlist",
+          "type" => "regular"
+        },
+      
+        "videos_list" => [@video1_response, @video2_response]
+      }
+    }
+    
+    @client = mock(Riddler::Client)
+    @client.stub!(:get).and_return(@response)
+    
+    @session = mock(Riddler::Session)
+    @session.stub!(:client).and_return(@client)
+    
+    @playlist = mock(Riddler::Playlist)
+    Riddler::Playlist.stub!(:new).and_return(@playlist)
+  end
+  
+  it "requires session and id" do
+    lambda {Riddler::Playlist.find}.should raise_error(ArgumentError, /0 for 2/)
+  end
+  
+  it "calls viddler.playlists.getDetails with id" do
+    @client.should_receive(:get).with('viddler.playlists.getDetails', hash_including(:playlist_id => "abc123"))
+    Riddler::Playlist.find(@session, "abc123")
+  end
+  
+  it "passes session and response to Playlist.new" do
+    Riddler::Playlist.should_receive(:new).with(@session, @response)
+    Riddler::Playlist.find(@session, "abc123")
+  end
+  
+  it "returns result of Playlist.new" do
+    Riddler::Playlist.find(@session, "abc123").should == @playlist
+  end
+end
