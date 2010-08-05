@@ -483,3 +483,25 @@ describe Riddler::Playlist, ".add_video" do
     Riddler::Playlist.add_video(@session, "abc123", "123abc")
   end
 end
+
+describe Riddler::Playlist, ".destroy" do
+  before(:each) do
+    @client = mock(Riddler::Client)
+    @client.stub!(:post)
+    
+    @session = mock(Riddler::Session, :client => @client)
+  end
+  
+  it "requires session and playlist" do
+    lambda {Riddler::Playlist.destroy}.should raise_error(ArgumentError, /0 for 2/)
+  end
+  
+  it "calls post viddler.playlists.delete with playlist_id" do
+    @client.should_receive(:post).with("viddler.playlists.delete", hash_including(:playlist_id => "abc123"))
+    Riddler::Playlist.destroy(@session, "abc123")
+  end
+  
+  it "returns true" do
+    Riddler::Playlist.destroy(@session, "abc123").should be_true
+  end
+end

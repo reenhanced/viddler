@@ -12,6 +12,11 @@ module Riddler
       self.new_with_proper_class(session, response)
     end
     
+    def self.destroy(session, playlist_id)
+      session.client.post("viddler.playlists.delete", :playlist_id => playlist_id)
+      true
+    end
+    
     def self.find(session, id)
       response = session.client.get("viddler.playlists.getDetails", :playlist_id => id)
       self.new_with_proper_class(session, response)
