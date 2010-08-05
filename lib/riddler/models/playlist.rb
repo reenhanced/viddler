@@ -1,9 +1,26 @@
 module Riddler
   class Playlist < Riddler::Base
-    attr_reader :id, :name, :type, :videos
+    attr_reader :id, :name, :type, :videos, :session
     
     def initialize(session, response={})
-      @videos = VideoList.new(session, response)
+      @session = session
+      self.populate_from_response!(response)
+    end
+    
+    def self.create!(session, attrs)
+      klass = attrs[:type] == 'smart' ? Riddler::SmartPlaylist : Riddler::RegularPlaylist
+      klass.new(session, session.client.post("viddler.playlists.create", attrs))
+    end
+    
+    def update_attributes!(attributes)
+      attributes[:playlist_id] = self.id
+      populate_from_response! self.session.client.post('viddler.playlists.setDetails', attributes)
+    end
+    
+    protected
+    
+    def populate_from_response!(response)
+      @videos = Riddler::VideoList.new(@session, response)
       
       return unless response['list_result']
       
@@ -15,12 +32,5 @@ module Riddler
         @type = playlist_attrs['type']
       end
     end
-    
-    def self.create!(session, attrs)
-      klass = attrs[:type] == 'smart' ? Riddler::SmartPlaylist : Riddler::RegularPlaylist
-      klass.new(session, session.client.post("viddler.playlists.create", attrs))
-    end
-    
-    protected
   end
 end

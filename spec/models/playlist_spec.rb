@@ -138,4 +138,66 @@ describe Riddler::Playlist, ".new" do
   it "assigns videos" do
     @playlist.videos.should == @video_list
   end
+  
+  it "sets session" do
+    @playlist.session.should == @session
+  end
+end
+
+describe Riddler::Playlist, "#update_attributes!" do
+  before(:each) do
+    @new_response = {
+      "list_result" => {
+        "page" => "1",
+        "per_page" => "10",
+        "playlist" => {
+          "id" => "abc123",
+          "name" => "New name",
+          "type" => "regular"
+        }
+      }
+    }    
+    
+    @client = mock(Riddler::Client)
+    @client.stub!(:post).and_return(@new_response)
+    
+    @session = mock(Riddler::Session, :client => @client)
+    Riddler::Session.stub!(:new).and_return(@session)
+    
+    @videos = mock(Riddler::VideoList)
+    Riddler::VideoList.stub!(:new).and_return(@videos)
+    
+    @attributes = {
+      :name => "New name"
+    }
+    
+    @original_response = {
+      "list_result" => {
+        "page" => "1",
+        "per_page" => "10",
+        "playlist" => {
+          "id" => "abc123",
+          "name" => "My new playlist",
+          "type" => "regular"
+        }
+      }
+    }    
+    
+    @playlist = Riddler::Playlist.new(@session, @original_response)
+  end
+  
+  it "calls post on client with viddler.playlists.setDetails and attributes" do
+    @client.should_receive(:post).with("viddler.playlists.setDetails", hash_including(@attributes))
+    @playlist.update_attributes!(@attributes)
+  end
+  
+  it "includes playlist id in API call" do
+    @client.should_receive(:post).with(anything, hash_including(:playlist_id => "abc123"))
+    @playlist.update_attributes!(@attributes)
+  end
+  
+  it "should update the name attribute" do
+    @playlist.update_attributes!(@attributes)
+    @playlist.name.should == "New name"
+  end
 end
