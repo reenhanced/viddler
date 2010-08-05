@@ -8,13 +8,23 @@ module Riddler
     end
     
     def self.create!(session, attrs)
-      klass = attrs[:type] == 'smart' ? Riddler::SmartPlaylist : Riddler::RegularPlaylist
-      klass.new(session, session.client.post("viddler.playlists.create", attrs))
+      response = session.client.post("viddler.playlists.create", attrs)
+      self.new_with_proper_class(session, response)
     end
     
     def self.find(session, id)
       response = session.client.get("viddler.playlists.getDetails", :playlist_id => id)
-      Riddler::Playlist.new(session, response)
+      self.new_with_proper_class(session, response)
+    end
+    
+    def self.move_video(session, playlist_id, from_index, to_index)
+      response = session.client.get("viddler.playlists.moveVideo", {
+        :playlist_id => playlist_id,
+        :from        => from_index,
+        :to          => to_index 
+      })
+      
+      self.new_with_proper_class(session, response)
     end
     
     def update_attributes!(attributes)
@@ -23,6 +33,11 @@ module Riddler
     end
     
     protected
+    
+    def self.new_with_proper_class(session, response)
+      klass = response['list_result']['playlist']['type'] == 'smart' ? Riddler::SmartPlaylist : Riddler::RegularPlaylist
+      klass.new(session, response)
+    end
     
     def populate_from_response!(response)
       @videos = Riddler::VideoList.new(@session, response)

@@ -221,7 +221,6 @@ describe Riddler::Playlist, ".find" do
         "playlist" => {
           "id" => "abc123",
           "name" => "My new playlist",
-          "type" => "regular"
         },
       
         "videos_list" => [@video1_response, @video2_response]
@@ -236,6 +235,12 @@ describe Riddler::Playlist, ".find" do
     
     @playlist = mock(Riddler::Playlist)
     Riddler::Playlist.stub!(:new).and_return(@playlist)
+    
+    @regular_playlist = mock(Riddler::RegularPlaylist)
+    Riddler::RegularPlaylist.stub!(:new).and_return(@regular_playlist)
+    
+    @smart_playlist = mock(Riddler::SmartPlaylist)
+    Riddler::SmartPlaylist.stub!(:new).and_return(@smart_playlist)
   end
   
   it "requires session and id" do
@@ -247,12 +252,98 @@ describe Riddler::Playlist, ".find" do
     Riddler::Playlist.find(@session, "abc123")
   end
   
-  it "passes session and response to Playlist.new" do
-    Riddler::Playlist.should_receive(:new).with(@session, @response)
+  it "passes session and response to RegularPlaylist.new if no type" do
+    @response['list_result']['playlist'].delete('type')
+    Riddler::RegularPlaylist.should_receive(:new).with(@session, @response)
+    Riddler::Playlist.find(@session, 'abc123')
+  end
+  
+  it "passes session and response to RegularPlaylist.new if type = regular" do
+    @response['list_result']['playlist']['type'] = 'regular'
+    Riddler::RegularPlaylist.should_receive(:new).with(@session, @response)
     Riddler::Playlist.find(@session, "abc123")
   end
   
-  it "returns result of Playlist.new" do
-    Riddler::Playlist.find(@session, "abc123").should == @playlist
+  it "passes session and response to SmartPlaylist.new if smart playlist" do
+    @response['list_result']['playlist']['type'] = 'smart'
+    Riddler::SmartPlaylist.should_receive(:new).with(@session, @response)
+    Riddler::Playlist.find(@session, "abc123")
+  end
+  
+  it "returns result of RegularPlaylist.new if no type" do
+    @response['list_result']['playlist'].delete('type')
+    Riddler::Playlist.find(@session, "abc123").should == @regular_playlist
+  end
+  
+  it "returns result of RegularPlaylist.new if type = regular" do
+    @response['list_result']['playlist']['type'] = 'regular'
+    Riddler::Playlist.find(@session, "abc123").should == @regular_playlist
+  end
+  
+  it "returns result of SmartPlaylist.new if type = smart" do
+    @response['list_result']['playlist']['type'] = 'smart'
+    Riddler::Playlist.find(@session, 'abc123').should == @smart_playlist
+  end
+end
+
+describe Riddler::Playlist, ".move_video" do
+  before(:each) do
+    @video1_response = {
+      "id" => "video1",
+      "title" => "Video 1"
+    }
+  
+    @video2_response = {
+      "id" => "video2",
+      "title" => "Video 2"
+    }
+  
+    @response = {
+      "list_result" => {
+        "page" => "1",
+        "per_page" => "10",
+        "playlist" => {
+          "id" => "abc123",
+          "name" => "My new playlist",
+        },
+      
+        "videos_list" => [@video2_response, @video1_response]
+      }
+    }
+    
+    @client = mock(Riddler::Client)
+    @client.stub!(:get).and_return(@response)
+
+    @session = mock(Riddler::Session, :client => @client)
+  end
+  
+  it "requires session, playlist_id, from, to" do
+    lambda {Riddler::Playlist.move_video}.should raise_error(ArgumentError, /0 for 4/)
+  end
+  
+  it "calls get viddler.playlists.moveVideo with playlist_id, from, and to" do
+    @client.should_receive(:get).with('viddler.playlists.moveVideo', hash_including(:playlist_id => "abc123", :from => "3", :to => "1"))
+    Riddler::Playlist.move_video(@session, "abc123", "3", "1")
+  end
+  
+  it "calls RegularPlaylist.new with session and response if no type" do
+    Riddler::RegularPlaylist.should_receive(:new).with(@session, @response)
+    Riddler::Playlist.move_video(@session, "abc123", "3", "1")
+  end
+  
+  it "calls RegularPlaylist.new with session and response if type == regular" do
+    @response['list_result']['playlist']['type'] = "regular"
+    Riddler::RegularPlaylist.should_receive(:new).with(@session, @response)
+    Riddler::Playlist.move_video(@session, "abc123", "3", "1")
+  end
+  
+  it "calls RegularPlaylist.new with session and response if type == smart" do
+    @response['list_result']['playlist']['type'] = "smart"
+    Riddler::SmartPlaylist.should_receive(:new).with(@session, @response)
+    Riddler::Playlist.move_video(@session, "abc123", "3", "1")
+  end
+  
+  it "returns playlist" do
+    Riddler::Playlist
   end
 end
