@@ -27,6 +27,15 @@ module Riddler
       self.new_with_proper_class(session, response)
     end
     
+    def self.remove_video(session, playlist_id, position)
+      response = session.client.get("viddler.playlists.removeVideo", {
+        :playlist_id => playlist_id,
+        :position    => position
+      })
+
+      self.new_with_proper_class(session, response)
+    end
+    
     def update_attributes!(attributes)
       attributes[:playlist_id] = self.id
       populate_from_response! self.session.client.post('viddler.playlists.setDetails', attributes)
