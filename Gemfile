@@ -1,7 +1,6 @@
 source "http://rubygems.org"
 
-gem "rest-client"
-gem "json"
+gemspec "riddler"
 
 group :test do
   gem "rspec"

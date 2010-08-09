@@ -1,6 +1,7 @@
 module Riddler
   module Exceptions
     class ArgumentError < ::ArgumentError; end
+    class AuthenticationError < ::StandardError; end
     
     class MissingApiKey < ::StandardError
       def message

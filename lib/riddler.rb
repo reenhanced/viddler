@@ -8,3 +8,12 @@ require 'json'
 
 require 'riddler/client'
 require 'riddler/exceptions'
+
+require 'riddler/models/exceptions'
+require 'riddler/models/base'
+require 'riddler/models/session'
+require 'riddler/models/video_list'
+require 'riddler/models/video'
+require 'riddler/models/playlist'
+require 'riddler/models/regular_playlist'
+require 'riddler/models/smart_playlist'

@@ -1,3 +1,10 @@
+PATH
+  remote: .
+  specs:
+    riddler (0.1.0)
+      json
+      rest-client
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -15,4 +22,5 @@ DEPENDENCIES
   ZenTest
   json
   rest-client
+  riddler!
   rspec
