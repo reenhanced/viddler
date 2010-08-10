@@ -246,10 +246,19 @@ describe Riddler::Playlist, ".find" do
   it "requires session and id" do
     lambda {Riddler::Playlist.find}.should raise_error(ArgumentError, /0 for 2/)
   end
-  
+    
   it "calls viddler.playlists.getDetails with id" do
     @client.should_receive(:get).with('viddler.playlists.getDetails', hash_including(:playlist_id => "abc123"))
     Riddler::Playlist.find(@session, "abc123")
+  end
+  
+  it "accepts options" do
+    lambda {Riddler::Playlist.find(@session, "abc123", {:a => :b})}.should_not raise_error
+  end
+  
+  it "includes options if specified" do
+    @client.should_receive(:get).with(anything, hash_including({:a => "b"}))
+    Riddler::Playlist.find(@session, "abc123", :a => "b")
   end
   
   it "passes session and response to RegularPlaylist.new if no type" do
@@ -325,6 +334,15 @@ describe Riddler::Playlist, ".move_video" do
   
   it "requires session, playlist_id, from, to" do
     lambda {Riddler::Playlist.move_video}.should raise_error(ArgumentError, /0 for 4/)
+  end
+  
+  it "accepts options" do
+    lambda {Riddler::Playlist.move_video(@session, "abc123", 1, 3, {:a => :b})}.should_not raise_error
+  end
+  
+  it "includes options if specified" do
+    @client.should_receive(:post).with(anything, hash_including({:a => "b"}))
+    Riddler::Playlist.move_video(@session, "abc123", 1, 3, :a => "b")
   end
   
   it "calls get viddler.playlists.moveVideo with playlist_id, from, and to" do
@@ -421,6 +439,15 @@ describe Riddler::Playlist, ".remove_video" do
     Riddler::Playlist.remove_video(@session, "abc123", "4")
   end
   
+  it "accepts options" do
+    lambda {Riddler::Playlist.remove_video(@session, "abc123", "4", {:a => :b})}.should_not raise_error
+  end
+  
+  it "includes options if specified" do
+    @client.should_receive(:post).with(anything, hash_including({:a => "b"}))
+    Riddler::Playlist.remove_video(@session, "abc123", "4", :a => "b")
+  end
+  
   it "returns value of Riddler::RegularPlaylist.new" do
     Riddler::Playlist.remove_video(@session, "abc123", "4").should == @playlist
   end
@@ -472,6 +499,15 @@ describe Riddler::Playlist, ".add_video" do
   it "calls post viddler.playlists.addVideo with session and params" do
     @client.should_receive(:post).with("viddler.playlists.addVideo", hash_including(:playlist_id => "abc123", :video_id => "123abc"))
     Riddler::Playlist.add_video(@session, "abc123", "123abc")
+  end
+  
+  it "accepts options" do
+    lambda {Riddler::Playlist.add_video(@session, "abc123", "123abc", {:a => :b})}.should_not raise_error
+  end
+  
+  it "includes options if specified" do
+    @client.should_receive(:post).with(anything, hash_including({:a => "b"}))
+    Riddler::Playlist.add_video(@session, "abc123", "123abc", :a => "b")
   end
   
   it "returns value of Riddler::RegularPlaylist.new" do

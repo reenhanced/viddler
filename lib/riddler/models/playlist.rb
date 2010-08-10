@@ -17,35 +17,35 @@ module Riddler
       true
     end
     
-    def self.find(session, id)
-      response = session.client.get("viddler.playlists.getDetails", :playlist_id => id)
+    def self.find(session, id, options={})
+      response = session.client.get("viddler.playlists.getDetails", {:playlist_id => id}.merge(options))
       self.new_with_proper_class(session, response)
     end
     
-    def self.add_video(session, playlist_id, video_id)
+    def self.add_video(session, playlist_id, video_id, options={})
       response = session.client.post("viddler.playlists.addVideo", {
         :playlist_id => playlist_id,
         :video_id    => video_id
-      })
+      }.merge(options))
       
       self.new_with_proper_class(session, response)
     end
     
-    def self.move_video(session, playlist_id, from_index, to_index)
+    def self.move_video(session, playlist_id, from_index, to_index, options={})
       response = session.client.post("viddler.playlists.moveVideo", {
         :playlist_id => playlist_id,
         :from        => from_index,
         :to          => to_index 
-      })
+      }.merge(options))
       
       self.new_with_proper_class(session, response)
     end
     
-    def self.remove_video(session, playlist_id, position)
+    def self.remove_video(session, playlist_id, position, options={})
       response = session.client.post("viddler.playlists.removeVideo", {
         :playlist_id => playlist_id,
         :position    => position
-      })
+      }.merge(options))
 
       self.new_with_proper_class(session, response)
     end
