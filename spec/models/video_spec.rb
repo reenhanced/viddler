@@ -127,3 +127,36 @@ describe Riddler::Video, ".new" do
     pending
   end
 end
+
+describe Riddler::Video, "#thumbnail_url" do
+  before(:each) do
+    @original_thumbnail_url = 'http://cdn-thumbs.viddler.com/thumbnail_2_598fdc2f_v2.jpg'
+    @medium_thumbnail_url   = 'http://cdn-thumbs.viddler.com/thumbnail_1_598fdc2f_v2.jpg'
+    @small_thumbnail_url    = 'http://cdn-thumbs.viddler.com/thumbnail_0_598fdc2f_v2.jpg'
+    
+    @session = mock(Riddler::Session)
+    
+    @video = Riddler::Video.new(@session, {
+      'id' => "598fdc2f",
+      'author' => "kyleslat",
+      'title' => "Niagara Falls",
+      'thumbnail_url' => @original_thumbnail_url
+    })
+  end
+  
+  it "should return thumbnail url" do
+    @video.thumbnail_url.should == @original_thumbnail_url
+  end
+  
+  it "should return medium thumbnail url" do
+    @video.thumbnail_url(:medium).should == @medium_thumbnail_url
+  end
+
+  it "should return small thumbnail url" do
+    @video.thumbnail_url(:small).should == @small_thumbnail_url
+  end
+  
+  it "should return original thumbnail if invalid size supplied" do
+    @video.thumbnail_url(:shrubbery).should == @original_thumbnail_url
+  end
+end

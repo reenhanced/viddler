@@ -1,5 +1,9 @@
 module Riddler
   class Video
+    DEFAULT_THUMBNAIL_URL = 'http://cdn-thumbs.viddler.com/images/videothmb.gif'
+    THUMBNAIL_DIMENSIONS  = [[76, 56], [114, 86]]
+    THUMBNAIL_SIZES       = [:small, :medium, :original]
+    
     attr_reader :id, :status, :author, :title, :length, :description, :url,
                 :thumbnail_url, :permalink, :html5_video_source, :view_count,
                 :comment_count, :uploaded_at, :made_public_at
@@ -24,6 +28,15 @@ module Riddler
     
     def is_favorite?
       @favorited == 1
+    end
+    
+    def thumbnail_url(size = nil)
+      url = @thumbnail_url || DEFAULT_THUMBNAIL_URL
+
+      if THUMBNAIL_SIZES.include?(size)
+        url.gsub!(/_[0-9]_/, "_#{THUMBNAIL_SIZES.rindex(size)}_")
+      end
+      url
     end
   end
 end
