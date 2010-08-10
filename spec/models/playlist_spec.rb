@@ -404,7 +404,7 @@ describe Riddler::Playlist, ".remove_video" do
     }
     
     @client = mock(Riddler::Client)
-    @client.stub!(:get).and_return(@response)
+    @client.stub!(:post).and_return(@response)
 
     @session = mock(Riddler::Session, :client => @client)
     
@@ -417,7 +417,7 @@ describe Riddler::Playlist, ".remove_video" do
   end
   
   it "calls get viddler.playlists.removeVideo with session, playlist_id, and position" do
-    @client.should_receive(:get).with('viddler.playlists.removeVideo', hash_including(:playlist_id => "abc123", :position => "4"))
+    @client.should_receive(:post).with('viddler.playlists.removeVideo', hash_including(:playlist_id => "abc123", :position => "4"))
     Riddler::Playlist.remove_video(@session, "abc123", "4")
   end
   
