@@ -42,7 +42,7 @@ module Riddler
     end
     
     def self.remove_video(session, playlist_id, position)
-      response = session.client.get("viddler.playlists.removeVideo", {
+      response = session.client.post("viddler.playlists.removeVideo", {
         :playlist_id => playlist_id,
         :position    => position
       })
