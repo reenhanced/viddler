@@ -312,7 +312,7 @@ describe Riddler::Playlist, ".move_video" do
     }
     
     @client = mock(Riddler::Client)
-    @client.stub!(:get).and_return(@response)
+    @client.stub!(:post).and_return(@response)
 
     @session = mock(Riddler::Session, :client => @client)
     
@@ -328,7 +328,7 @@ describe Riddler::Playlist, ".move_video" do
   end
   
   it "calls get viddler.playlists.moveVideo with playlist_id, from, and to" do
-    @client.should_receive(:get).with('viddler.playlists.moveVideo', hash_including(:playlist_id => "abc123", :from => "3", :to => "1"))
+    @client.should_receive(:post).with('viddler.playlists.moveVideo', hash_including(:playlist_id => "abc123", :from => "3", :to => "1"))
     Riddler::Playlist.move_video(@session, "abc123", "3", "1")
   end
   

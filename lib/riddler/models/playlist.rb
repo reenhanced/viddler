@@ -32,7 +32,7 @@ module Riddler
     end
     
     def self.move_video(session, playlist_id, from_index, to_index)
-      response = session.client.get("viddler.playlists.moveVideo", {
+      response = session.client.post("viddler.playlists.moveVideo", {
         :playlist_id => playlist_id,
         :from        => from_index,
         :to          => to_index 
