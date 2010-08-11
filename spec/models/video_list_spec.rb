@@ -47,7 +47,7 @@ describe Riddler::VideoList, "methods" do
   it "does not respond to []=" do
     pending
     @video_list.should_not respond_to(:[]=)
-  end  
+  end
 end
 
 describe Riddler::VideoList, ".new" do
@@ -103,5 +103,17 @@ describe Riddler::VideoList, ".new" do
     Riddler::Video.should_receive(:new).with(@session, @video1_response).once
     Riddler::Video.should_receive(:new).with(@session, @video2_response).once
     Riddler::VideoList.new(@session, @response)
+  end
+  
+  it "accepts video list parameter" do
+    lambda {Riddler::VideoList.new(@session, @response, 'video_list')}.should_not raise_error(ArgumentError)
+  end
+  
+  it "uses the video_list parameter to find list of videos" do
+    @response['list_result']['some_crazy_name'] = @response['list_result'].delete('videos_list')
+    Riddler::Video.stub!(:new).and_return(@video1, @video2, nil)
+    video_list = Riddler::VideoList.new(@session, @response, 'some_crazy_name')
+    video_list[0].should == @video1
+    video_list[1].should == @video2
   end
 end

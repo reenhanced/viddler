@@ -26,6 +26,11 @@ module Riddler
       @made_public_at     = Time.at(response["made_public_time"].to_i)
     end
     
+    def self.find_by_username(session, username, options={})
+      response = session.client.get("viddler.videos.getByUser", options.merge(:user => username))
+      Riddler::VideoList.new(session, response, 'video_list')
+    end
+    
     def is_favorite?
       @favorited == 1
     end
