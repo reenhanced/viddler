@@ -9,12 +9,14 @@ module Riddler
     (STRING_ATTRIBUTES + INT_ATTRIBUTES).each {|a| attr_accessor a}
     
     def initialize(session, response)
+      response = response['user'] if response['user']
+      
       STRING_ATTRIBUTES.each do |attr|
-        instance_variable_set("@#{attr.to_s}", response['user'][attr.to_s]) if response['user'][attr.to_s]
+        instance_variable_set("@#{attr.to_s}", response[attr.to_s]) if response[attr.to_s]
       end
       
       INT_ATTRIBUTES.each do |attr|
-        instance_variable_set("@#{attr.to_s}", response['user'][attr.to_s].to_i) if response['user'][attr.to_s]
+        instance_variable_set("@#{attr.to_s}", response[attr.to_s].to_i) if response[attr.to_s]
       end
     end
   end

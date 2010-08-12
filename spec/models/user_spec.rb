@@ -86,4 +86,67 @@ describe Riddler::User, ".new" do
   it "sets favourite_video_count" do
     @user.favourite_video_count.should == 1999
   end
+  
+  context "with no user node" do
+    before(:each) do
+      @response = @response['user']
+      @user = Riddler::User.new(@session, @response)
+    end
+    
+    it "sets username" do
+      @user.username.should == "kyleslat"
+    end
+
+    it "sets first_name" do
+      @user.first_name.should == "Kyle"
+    end
+
+    it "sets last_name" do
+      @user.last_name.should == "Slattery"
+    end
+
+    it "sets about_me" do
+      @user.about_me.should == "Some about me"
+    end
+
+    it "sets avatar" do
+      @user.avatar.should == "http://myavatar.com/image.jpg"
+    end
+
+    it "sets age" do
+      @user.age.should == 99
+    end
+
+    it "sets video_upload_count" do
+      @user.video_upload_count.should == 50
+    end
+
+    it "sets video_watch_count" do
+      @user.video_watch_count.should == 111
+    end
+
+    it "sets homepage" do
+      @user.homepage.should == "http://www.viddler.com"
+    end
+
+    it "sets gender" do
+      @user.gender.should == "m"
+    end
+
+    it "sets company" do
+      @user.company.should == "Viddler"
+    end
+
+    it "sets city" do
+      @user.city.should == "Bethlehem, PA"
+    end
+
+    it "sets friend_count" do
+      @user.friend_count.should == 200
+    end
+
+    it "sets favourite_video_count" do
+      @user.favourite_video_count.should == 1999
+    end
+  end
 end
