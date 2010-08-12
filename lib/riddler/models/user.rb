@@ -1,5 +1,7 @@
 module Riddler
   class User
+    TYPES = ['personal', 'partner', 'business']
+    
     STRING_ATTRIBUTES = [:username, :first_name, :last_name, :about_me,
                          :avatar, :homepage, :company, :gender, :city]
                         
