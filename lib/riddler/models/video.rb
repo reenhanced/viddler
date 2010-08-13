@@ -28,7 +28,7 @@ module Riddler
     
     def self.find_by_username(session, username, options={})
       response = session.client.get("viddler.videos.getByUser", options.merge(:user => username))
-      Riddler::VideoList.new(session, response, 'video_list')
+      Riddler::VideoList.new(session, response)
     end
     
     def is_favorite?
