@@ -1,3 +1,4 @@
 doc
 log/*.log
 pkg
+test/api_settings.rb

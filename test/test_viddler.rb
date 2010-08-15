@@ -5,20 +5,31 @@ class ViddlerTest < Test::Unit::TestCase
     def message
       'In order to run this test, insert working Viddler API key inside API_KEY constant.'
     end
-  end  
-  
+  end
+
   class CredentialsRequired < Exception
     def message
       'In order to run this test, insert working Viddler username and password inside LOGIN and PASSWORD constants.'
     end
   end
-  
-  # In order to run the tests you need a working Viddler account and an API key.
-  API_KEY               = nil
-  LOGIN                 = nil
-  PASSWORD              = nil
-  TEST_VIDEO_FILE_PATH  = '/path/to/video'
-  
+
+  begin
+    load 'api_settings.rb'
+    raise LoadError unless defined?(API_KEY)
+    raise LoadError unless defined?(LOGIN)
+    raise LoadError unless defined?(PASSWORD)
+    raise LoadError unless defined?(TEST_VIDEO_FILE_PATH)
+  rescue LoadError
+    puts "\n"
+    puts "To run tests, create an test/api_settings.rb file with the following constants:\n\n"
+    puts "API_KEY = 'your_viddler_api_key'"
+    puts "LOGIN = 'your_viddler_login'"
+    puts "PASSWORD = 'your_viddler_password'"
+    puts "TEST_VIDEO_FILE_PATH = '/path/to/video/file'"
+    puts "\n"*2
+    exit
+  end
+
   def setup
     raise KeyRequired unless API_KEY
     @viddler = Viddler::Base.new(API_KEY, LOGIN, PASSWORD)
@@ -29,50 +40,50 @@ class ViddlerTest < Test::Unit::TestCase
     @viddler.authenticate
     assert @viddler.authenticated?
   end
-  
+
   def test_should_get_record_token
     credentials_required
     token = @viddler.get_record_token
     assert_kind_of String, token
   end
-  
+
   def test_should_upload_video
     credentials_required
     file = File.open(TEST_VIDEO_FILE_PATH)
     video = @viddler.upload_video(:file => file, :title => 'Testing', :description => 'Bla', :tags => 'one, two, three')
   end
-  
+
   def test_should_find_profile
     user = @viddler.find_profile('ilya')
     assert_kind_of Viddler::User, user
   end
-  
+
   def test_should_update_profile
     credentials_required
-    user = @viddler.update_profile(:first_name => 'Ilya', 
-                                   :last_name => 'Sabanin', 
-                                   :about_me => 'A guy', 
+    user = @viddler.update_profile(:first_name => 'Ilya',
+                                   :last_name => 'Sabanin',
+                                   :about_me => 'A guy',
                                    :birthdate => '1987-05-22',
                                    :gender => 'm',
                                    :company => 'Wildbit',
                                    :city => 'Krasnoyarsk')
     assert_kind_of Viddler::User, user
   end
-  
+
   def test_should_update_account
     credentials_required
     assert @viddler.update_account(:show_account => '0')
   end
-  
+
   def test_should_get_video_status
     assert @viddler.get_video_status('f8605d95')
   end
-  
+
   def test_should_find_video_by_id
     video = @viddler.find_video_by_id('6b0b9af1')
     assert_kind_of Viddler::Video, video
   end
-  
+
   def test_should_get_dimensions
     video = @viddler.find_video_by_id('6b0b9af1')
     assert_equal 640, video.width
@@ -83,24 +94,24 @@ class ViddlerTest < Test::Unit::TestCase
     video = @viddler.find_video_by_url('http://www.viddler.com/explore/ijustine/videos/293/')
     assert_kind_of Viddler::Video, video
   end
-  
+
   def test_should_find_all_videos_by_user
     videos = @viddler.find_all_videos_by_user('ijustine')
     assert_kind_of Viddler::Video, videos.first
   end
-  
+
   def test_should_find_all_videos_by_tag
     videos = @viddler.find_all_videos_by_tag('hot')
     assert_kind_of Viddler::Video, videos.first
   end
-  
+
   def test_should_find_all_features_videos
     videos = @viddler.find_all_featured_videos
     assert_kind_of Viddler::Video, videos.first
   end
-  
+
   private
-  
+
   def credentials_required
     raise CredentialsRequired unless LOGIN and PASSWORD
   end
