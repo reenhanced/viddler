@@ -11,7 +11,7 @@ begin
     gem.authors = ["Ilya Sabanin"]
 
     gem.add_dependency("i18n")
-    gem.add_dependency("activesupport", [">= 3.0.0.rc"])
+    gem.add_dependency("activesupport", ">= 3.0.0.rc")
     gem.add_dependency("rest-client")
     gem.add_dependency("mime-types")
 
