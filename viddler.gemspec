@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{viddler}
-  s.version = "0.2.8"
+  s.version = "0.3.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ilya Sabanin"]
@@ -46,8 +46,6 @@ Currently implemented API methods:
      "README.txt",
      "Rakefile",
      "VERSION",
-     "config/hoe.rb",
-     "config/requirements.rb",
      "lib/ext/array.rb",
      "lib/ext/hash.rb",
      "lib/ext/open_struct.rb",
@@ -64,7 +62,8 @@ Currently implemented API methods:
      "test/test_helper.rb",
      "test/test_viddler.rb",
      "test/video.rb",
-     "tmp/.gitignore"
+     "tmp/.gitignore",
+     "viddler.gemspec"
   ]
   s.homepage = %q{http://viddler.rubyforge.org}
   s.rdoc_options = ["--charset=UTF-8"]
