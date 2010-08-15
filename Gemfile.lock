@@ -11,7 +11,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activesupport (>= 3.0.0.rc)
+  activesupport (>= 2.1)
   i18n
   mime-types
   rest-client

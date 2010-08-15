@@ -1,4 +1,4 @@
-require 'active_support/core_ext'
+require 'active_support/core_ext/object'
 require 'ostruct'
 
 require 'ext/open_struct'
