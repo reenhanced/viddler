@@ -26,11 +26,11 @@ Currently implemented API methods:
 * viddler.videos.getByUser
 * viddler.videos.getByTag
 * viddler.videos.getFeatured
-  
+
 == NOT YET IMPLEMENTED:
 
 * Wrapper for video permissions.
-  
+
 == REQUIREMENTS:
 
 * active_support[http://rubyforge.org/projects/activesupport/]
@@ -39,7 +39,7 @@ Currently implemented API methods:
 
 == INSTALL:
 
-* sudo gem install viddler
+* gem install viddler
 
 == CONTACT:
 
