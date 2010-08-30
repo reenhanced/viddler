@@ -1,5 +1,5 @@
 module Riddler
-  class Playlist < Riddler::Base
+  class Playlist
     attr_reader :id, :name, :type, :videos, :session
     
     def initialize(session, response={})
