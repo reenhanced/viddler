@@ -33,7 +33,7 @@ module Riddler
     
     def self.get_embed_code(session, video_id, options={})
       response = session.client.get("viddler.videos.getEmbedCode", options.merge(:video_id => video_id))
-      response[:embed_code]
+      response['video']['embed_code']
     end
     
     def is_favorite?

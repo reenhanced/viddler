@@ -201,7 +201,7 @@ end
 
 describe Riddler::Video, ".get_embed_code" do
   before(:each) do
-    @response = {:embed_code => 'trufflehunter'}
+    @response = {'video' => {'embed_code' => 'waldo'}}
     @client   = mock(Riddler::Client, :get => @response)
     @session  = mock(Riddler::Session, :client => @client)
   end
@@ -224,7 +224,7 @@ describe Riddler::Video, ".get_embed_code" do
     Riddler::Video.get_embed_code(@session, '1234', :a => 'b')
   end
   
-  it "returns :embed_code portion of response" do
-    Riddler::Video.get_embed_code(@session, '1234').should == @response[:embed_code]
+  it "returns embed code portion of response" do
+    Riddler::Video.get_embed_code(@session, '1234').should == @response['video']['embed_code']
   end
 end
