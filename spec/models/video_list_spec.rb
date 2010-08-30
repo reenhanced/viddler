@@ -23,7 +23,7 @@ describe Riddler::VideoList, "methods" do
           "type" => "regular"
         },
         
-        "videos_list" => [@video1_response, @video2_response]
+        "video_list" => [@video1_response, @video2_response]
       }
     }
     
@@ -72,7 +72,7 @@ describe Riddler::VideoList, ".new" do
           "type" => "regular"
         },
         
-        "videos_list" => [@video1_response, @video2_response]
+        "video_list" => [@video1_response, @video2_response]
       }
     }
     
@@ -110,7 +110,7 @@ describe Riddler::VideoList, ".new" do
   end
   
   it "uses the video_list parameter to find list of videos" do
-    @response['list_result']['some_crazy_name'] = @response['list_result'].delete('videos_list')
+    @response['list_result']['some_crazy_name'] = @response['list_result'].delete('video_list')
     Riddler::Video.stub!(:new).and_return(@video1, @video2, nil)
     video_list = Riddler::VideoList.new(@session, @response, 'some_crazy_name')
     video_list[0].should == @video1
