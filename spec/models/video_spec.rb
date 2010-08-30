@@ -198,3 +198,33 @@ describe Riddler::Video, ".find_by_username" do
     Riddler::Video.find_by_username(@session, "kyleslat").should == @video_list
   end
 end
+
+describe Riddler::Video, ".get_embed_code" do
+  before(:each) do
+    @response = {:embed_code => 'trufflehunter'}
+    @client   = mock(Riddler::Client, :get => @response)
+    @session  = mock(Riddler::Session, :client => @client)
+  end
+  
+  it "requires session, video_id" do
+    lambda {Riddler::Video.get_embed_code}.should raise_error(ArgumentError, /0 for 2/)
+  end
+  
+  it "calls GET viddler.videos.getEmbedCode" do
+    @client.should_receive(:get).with('viddler.videos.getEmbedCode', hash_including(:video_id => '1234'))
+    Riddler::Video.get_embed_code(@session, '1234')
+  end
+  
+  it "accepts options" do
+    lambda {Riddler::Video.get_embed_code(@session, '1234', :embed_code_type => 3)}.should_not raise_error
+  end
+  
+  it "passes options to GET" do
+    @client.should_receive(:get).with(anything, hash_including(:a => 'b'))
+    Riddler::Video.get_embed_code(@session, '1234', :a => 'b')
+  end
+  
+  it "returns :embed_code portion of response" do
+    Riddler::Video.get_embed_code(@session, '1234').should == @response[:embed_code]
+  end
+end
