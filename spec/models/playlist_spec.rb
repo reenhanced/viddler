@@ -102,6 +102,9 @@ describe Riddler::Playlist, ".new" do
     }
   
     @session = mock(Riddler::Session)
+    @new_session = mock(Riddler::Session)
+    Riddler::Session.stub!(:new).and_return(@new_session)
+  
   
     @video_list = mock(Riddler::VideoList)
   
@@ -110,8 +113,12 @@ describe Riddler::Playlist, ".new" do
     @playlist = Riddler::Playlist.new(@session, @response)    
   end
 
-  it "requires session" do
-    lambda {Riddler::Playlist.new}.should raise_error(ArgumentError)
+  it "does not require session" do
+    lambda {Riddler::Playlist.new}.should_not raise_error(ArgumentError)
+  end
+  
+  it "assigns value of Session.new if no session given" do
+    Riddler::Playlist.new.session.should == @new_session
   end
 
   it "does not require attributes" do

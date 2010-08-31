@@ -2,8 +2,8 @@ module Riddler
   class Playlist
     attr_reader :id, :name, :type, :videos, :session
     
-    def initialize(session, response={})
-      @session = session
+    def initialize(session=nil, response={})
+      @session = session || Session.new
       self.populate_from_response!(response)
     end
     
