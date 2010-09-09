@@ -17,7 +17,8 @@ describe Riddler::User, ".new" do
         "company" => "Viddler",
         "city" => "Bethlehem, PA",
         "friend_count" => "200",
-        "favourite_video_count" => "1999"
+        "favourite_video_count" => "1999",
+        "email" => "kyle@viddler.com"
       }
     }
     
@@ -85,6 +86,10 @@ describe Riddler::User, ".new" do
   
   it "sets favourite_video_count" do
     @user.favourite_video_count.should == 1999
+  end
+  
+  it "sets email" do
+    @user.email.should == "kyle@viddler.com"
   end
   
   context "with no user node" do

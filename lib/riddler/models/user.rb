@@ -3,7 +3,7 @@ module Riddler
     TYPES = ['personal', 'partner', 'business']
     
     STRING_ATTRIBUTES = [:username, :first_name, :last_name, :about_me,
-                         :avatar, :homepage, :company, :gender, :city]
+                         :avatar, :homepage, :company, :gender, :city, :email]
                         
     INT_ATTRIBUTES    = [:age, :video_upload_count, :video_watch_count,
                          :friend_count, :favourite_video_count]
