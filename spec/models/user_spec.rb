@@ -32,6 +32,10 @@ describe Riddler::User, ".new" do
     lambda {Riddler::User.new}.should raise_error(ArgumentError, /0 for 2/)
   end
   
+  it "sets raw_response" do
+    @user.raw_response.should == @response['user']
+  end
+  
   it "sets username" do
     @user.username.should == "kyleslat"
   end
