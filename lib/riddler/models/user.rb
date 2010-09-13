@@ -13,7 +13,8 @@ module Riddler
     attr_accessor :raw_response
 
     def initialize(session, response)
-      self.raw_response = response = response['user'] if response['user']
+      response = response['user'] if response['user']
+      self.raw_response = response
 
       STRING_ATTRIBUTES.each do |attr|
         instance_variable_set("@#{attr.to_s}", response[attr.to_s]) if response[attr.to_s]
