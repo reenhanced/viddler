@@ -12,6 +12,7 @@ describe Riddler::Video, ".new" do
       "url" => "http://www.viddler.com/explore/jhammer/videos/262/",
       "thumbnail_url" => "http://cdn-thumbs.viddler.com/thumbnail_2_73e7156f_v1.jpg",
       "permalink" => "http://www.viddler.com/explore/jhammer/videos/262/",
+      "embed_code" => "<object classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" width=\"437\" height=\"288\" id=\"viddler_gamervision_1290\"><param name=\"movie\" value=\"http://www.viddler.com/player/73e7156f/\" /><param name=\"allowScriptAccess\" value=\"always\" /><param name=\"allowFullScreen\" value=\"true\" /><embed src=\"http://www.viddler.com/player/73e7156f/\"  wmode=\"transparent\" width=\"437\" height=\"288\" type=\"application/x-shockwave-flash\" allowScriptAccess=\"always\" allowFullScreen=\"true\" name=\"viddler_gamervision_1290\" /></embed></object>",
       "html5_video_source" => "http://www.viddler.com/file/73e7156f/html5",
       "view_count" => "69",
       "upload_time" => "1276693288",
@@ -97,6 +98,10 @@ describe Riddler::Video, ".new" do
   
   it "sets permalink" do
     @video.permalink.should == "http://www.viddler.com/explore/jhammer/videos/262/"
+  end
+  
+  it "sets embed_code" do
+    @video.embed_code.should == "<object classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" width=\"437\" height=\"288\" id=\"viddler_gamervision_1290\"><param name=\"movie\" value=\"http://www.viddler.com/player/73e7156f/\" /><param name=\"allowScriptAccess\" value=\"always\" /><param name=\"allowFullScreen\" value=\"true\" /><embed src=\"http://www.viddler.com/player/73e7156f/\"  wmode=\"transparent\" width=\"437\" height=\"288\" type=\"application/x-shockwave-flash\" allowScriptAccess=\"always\" allowFullScreen=\"true\" name=\"viddler_gamervision_1290\" /></embed></object>"
   end
   
   it "sets html5_video_source" do
