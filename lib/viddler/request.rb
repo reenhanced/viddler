@@ -53,7 +53,7 @@ module Viddler
       if block_given?
         set(:params, &block)
       end
-
+      
       if post? and multipart?
         put_multipart_params_into_body
       else

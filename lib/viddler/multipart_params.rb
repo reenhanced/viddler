@@ -20,16 +20,18 @@ class MultipartParams #:nodoc:
     files_params = hash.find_all{|k,v| v.is_a?(File)}.to_h
     text_params = hash - files_params
     
-    pack_hash(text_params, marker) + marker + pack_hash(files_params, marker) + "--#{@boundary_token}--\r\n"
+    pack_hash(text_params, marker) + marker + pack_hash(files_params, marker) + marker
   end
   
   def pack_hash(hash, marker)
     hash.map do |name, value|
       marker + case value
-      when String
+      when String, Fixnum
         text_to_multipart(name, value)
       when File
         file_to_multipart(name, value)
+      else
+        raise "Unexpected #{value.class}: #{value.inspect}"
       end
     end.join('')
   end
