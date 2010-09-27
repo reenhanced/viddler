@@ -166,6 +166,33 @@ describe Riddler::Video, "#thumbnail_url" do
   end
 end
 
+describe Riddler::Video, "#embed_code" do
+  before(:each) do
+    @embed_code = "<object classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" width=\"437\" height=\"288\" id=\"viddler_gamervision_1290\"><param name=\"movie\" value=\"http://www.viddler.com/player/73e7156f/\" /><param name=\"allowScriptAccess\" value=\"always\" /><param name=\"allowFullScreen\" value=\"true\" /><embed src=\"http://www.viddler.com/player/73e7156f/\"  wmode=\"transparent\" width=\"437\" height=\"288\" type=\"application/x-shockwave-flash\" allowScriptAccess=\"always\" allowFullScreen=\"true\" name=\"viddler_gamervision_1290\" /></embed></object>"
+    @session = mock(Riddler::Session)
+    @video = Riddler::Video.new(@session, {
+      'id' => "598fdc2f",
+      'author' => "kyleslat",
+      'title' => "Niagara Falls",
+      "embed_code" => @embed_code
+    })
+    
+    @video_without_embed_code = Riddler::Video.new(@session, {
+      'id' => "598fdc2f",
+      'author' => "kyleslat",
+      'title' => "Niagara Falls",
+    })
+  end
+  
+  it "should return embed_code" do
+    @video.embed_code.should == @embed_code
+  end
+  
+  it "should raise ApiError if embed_code is accessed without being set" do
+    lambda {@video_without_embed_code.embed_code}.should raise_error(Riddler::Exceptions::ApiError)
+  end
+end
+
 describe Riddler::Video, ".find_by_username" do
   before(:each) do
     @response = {'a' => 'b'}

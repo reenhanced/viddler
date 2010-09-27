@@ -49,5 +49,10 @@ module Riddler
       end
       url
     end
+    
+    def embed_code
+      raise Riddler::Exceptions::ApiError.new(4, 'Embed code is not set on video', 'Pass :add_embed_code => true in options to return embed_code with video') if @embed_code.nil?
+      @embed_code
+    end
   end
 end
