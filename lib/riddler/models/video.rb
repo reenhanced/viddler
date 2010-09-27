@@ -49,9 +49,5 @@ module Riddler
       end
       url
     end
-    
-    def embed_code
-      @embed_code || raise Riddler::Exceptions::ApiError.new(4, "Embed code not included in response.", "Pass :add_embed_code => true in arguments to return a video's embed_code.")
-    end
   end
 end
