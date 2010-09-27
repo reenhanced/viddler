@@ -100,6 +100,15 @@ class ViddlerTest < Test::Unit::TestCase
     videos = @viddler.find_all_videos_by_user('ijustine')
     assert_kind_of Viddler::Video, videos.first
   end
+  
+  def test_should_update_video
+    credentials_required
+    videos = @viddler.find_all_videos_by_user(LOGIN)
+    raise LoadError, "You must have at least one video in your account to test updates" unless videos.length > 0
+    video = videos.first
+    update = @viddler.update_video(video.id, :title => video.title + ' [test]', :description => video.description + ' [tested]')
+    assert_kind_of Viddler::Video, update
+  end
 
   def test_should_find_all_videos_by_tag
     videos = @viddler.find_all_videos_by_tag('hot')

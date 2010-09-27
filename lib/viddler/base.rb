@@ -395,7 +395,7 @@ module Viddler
       request = Viddler::Request.new(:get, 'videos.getByUser')
       request.run do |p|
         p.api_key     = @api_key
-        p.sessionid   = @session_id if authenticated?
+        p.sessionid   = @session_id
         p.user        = username
         p.page        = options[:page] || 1
         p.per_page    = options[:per_page] || 20
@@ -461,8 +461,7 @@ module Viddler
     end
 
     def parse_videos_list(video_list)
-      return [] unless video_list['video'].is_a?(Array)
-      video_list['video'].collect do |attr|
+      Array.wrap(video_list['video']).collect do |attr|
         next unless attr.is_a?(Hash)
         Viddler::Video.new(attr)
       end
