@@ -149,9 +149,9 @@ module Viddler
       endpoint = request.response['upload']['endpoint'] 
     
       # Upload to endpoint url
-     request = Viddler::Request.new(:post, 'videos.upload')
-     request.url = endpoint
-     request.run do |p|
+      request = Viddler::Request.new(:post, 'videos.upload')
+      request.url = endpoint
+      request.run do |p|
         p.api_key     = @api_key
         p.sessionid   = @session_id
         for param, value in new_attributes
