@@ -47,12 +47,11 @@ class ViddlerTest < Test::Unit::TestCase
     assert_kind_of String, token
   end
 
-  # This doesnt seem to exist
-  # def test_should_upload_video
-  #   credentials_required
-  #   file = File.open(TEST_VIDEO_FILE_PATH)
-  #   video = @viddler.upload_video(:file => file, :title => 'Testing', :description => 'Bla', :tags => 'one, two, three')
-  # end
+  def test_should_upload_video
+    credentials_required
+    file = File.open(TEST_VIDEO_FILE_PATH)
+    video = @viddler.upload_video(:file => file, :title => 'Testing', :description => 'Bla', :tags => 'one, two, three')
+  end
 
   # doesnt work
   # def test_should_update_profile

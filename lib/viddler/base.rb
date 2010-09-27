@@ -29,6 +29,8 @@ module Viddler
   #   @viddler = Viddler::Base.new(YOUR_API_KEY)
   #
   class Base
+    attr_accessor :session_id, :username, :password
+    
     # Creates new viddler instance.
     #
     # Example:
@@ -117,6 +119,46 @@ module Viddler
         end
       end
       request.response['user']['username']
+    end
+    
+    # Implements <tt>viddler.videos.upload[http://wiki.developers.viddler.com/index.php/Viddler.videos.upload]</tt>. Requires authentication.
+    #
+    # <tt>new_attributes</tt> hash should contain next required keys:
+    # * <tt>title:</tt> The video title;
+    # * <tt>description:</tt> The video description;
+    # * <tt>tags:</tt> The video tags;
+    # * <tt>file:</tt> The video file;
+    # * <tt>make_public:</tt> Use "1" for true and "0" for false to choose whether or not the video goes public when uploaded.
+    #
+    # Example:
+    #
+    #  @viddler.upload_video(:title => 'Great Title', :file => File.open('/movies/movie.mov'), ...)
+    #
+    # Returns Viddler::Video instance. 
+    #
+    def upload_video(new_attributes={})
+      authenticate unless authenticated?
+      Viddler::ApiSpec.check_attributes('videos.upload', new_attributes)
+
+      # Get an upload endpoint
+      request = Viddler::Request.new(:post, 'viddler.videos.prepareUpload')
+      request.run do |p|
+        p.api_key     = @api_key
+        p.sessionid   = @session_id
+      end
+      endpoint = request.response['upload']['endpoint'] 
+    
+      # Upload to endpoint url
+     request = Viddler::Request.new(:post, 'videos.upload')
+     request.url = endpoint
+     request.run do |p|
+        p.api_key     = @api_key
+        p.sessionid   = @session_id
+        for param, value in new_attributes
+          p.send("#{param}=", value)
+        end
+      end
+      Viddler::Video.new(request.response['video'])
     end
 
     # Implements <tt>viddler.videos.delete[http://wiki.developers.viddler.com/index.php/Viddler.videos.delete]</tt>. Requires authentication.
