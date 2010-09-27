@@ -1,3 +1,8 @@
+== 0.3.1 2010-09-27
+* 1 reenhancement:
+  * Video upload working properly
+  
+
 == 0.2.4 2008-10-20
 * 1 enhancement:
   * Added dimensions to video
