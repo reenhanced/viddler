@@ -16,11 +16,11 @@ class MultipartParams #:nodoc:
   end
   
   def pack_params(hash)
-    marker = "--#{@boundary_token}\r\n"
+    marker = "--#{@boundary_token}"
     files_params = hash.find_all{|k,v| v.is_a?(File)}.to_h
     text_params = hash - files_params
     
-    pack_hash(text_params, marker) + marker + pack_hash(files_params, marker) + marker
+    pack_hash(text_params, marker+"\r\n") + pack_hash(files_params, marker+"\r\n") + marker + "--"
   end
   
   def pack_hash(hash, marker)
