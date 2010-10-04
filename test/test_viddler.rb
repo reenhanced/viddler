@@ -51,6 +51,17 @@ class ViddlerTest < Test::Unit::TestCase
     credentials_required
     file = File.open(TEST_VIDEO_FILE_PATH)
     video = @viddler.upload_video(:file => file, :title => 'Testing', :description => 'Bla', :tags => 'one, two, three', :make_public => 1)
+    assert_kind_of Viddler::Video, video
+  end
+
+  def test_should_upload_tempfile
+    credentials_required
+    file = File.open(TEST_VIDEO_FILE_PATH)
+    tmpfile = Tempfile.new('viddlertest')
+    tmpfile << file.read
+    tmpfile.flush
+    video = @viddler.upload_video(:file => tmpfile, :title => 'Testing Tempfile', :description => 'tempfile description', :tags => 'one, two, three', :make_public => 1)
+    assert_kind_of Viddler::Video, video
   end
 
   # doesnt work
