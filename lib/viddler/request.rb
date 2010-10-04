@@ -108,7 +108,8 @@ module Viddler
     end
 
     def multipart? #:nodoc:
-      if params.find{|k,v| v.is_a?(IOStream)} then true else false end
+      # Todo: Fix this to find a common ancestor.
+      if params.find{|k,v| v.is_a?(File) or v.is_a?(Tempfile) } then true else false end
     end
 
     def post? #:nodoc:
