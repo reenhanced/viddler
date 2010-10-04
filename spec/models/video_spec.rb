@@ -199,6 +199,70 @@ describe Riddler::Video, ".find_by_username" do
   end
 end
 
+describe Riddler::Video, ".find" do
+  before(:each) do
+    @response = {
+      'video' => {
+        "id" => "d773b049",
+      }
+    }
+    @client = mock(Riddler::Client, :get => @response)
+    @session = mock(Riddler::Session, :client => @client)
+    @video = mock(Riddler::Video)
+    Riddler::Video.stub!(:new).and_return(@video)
+  end
+  
+  it "requires session, video_id" do
+    lambda {Riddler::Video.find}.should raise_error(ArgumentError, /0 for 2/)
+  end
+  
+  it "calls GET viddler.videos.getDetails" do
+    @client.should_receive(:get).with('viddler.videos.getDetails', hash_including(:video_id => '1234'))
+    Riddler::Video.find(@session, '1234')
+  end
+  
+  it "calls Video.new with session and response" do
+    Riddler::Video.should_receive(:new).with(@session, @response['video'])
+    Riddler::Video.find(@session, '1234')
+  end
+  
+  it "returns result of Riddler::Video.new" do
+    Riddler::Video.find(@session, '1234').should == @video
+  end
+end
+
+describe Riddler::Video, ".find_by_url" do
+  before(:each) do
+    @response = {
+      'video' => {
+        "id" => "d773b049",
+      }
+    }
+    @client = mock(Riddler::Client, :get => @response)
+    @session = mock(Riddler::Session, :client => @client)
+    @video = mock(Riddler::Video)
+    Riddler::Video.stub!(:new).and_return(@video)
+  end
+  
+  it "requires session, url" do
+    lambda {Riddler::Video.find_by_url}.should raise_error(ArgumentError, /0 for 2/)
+  end
+  
+  it "calls GET viddler.videos.getDetails" do
+    @client.should_receive(:get).with('viddler.videos.getDetails', hash_including(:url => 'http://viddler.com'))
+    Riddler::Video.find_by_url(@session, 'http://viddler.com')
+  end
+  
+  it "calls Video.new with session and response" do
+    Riddler::Video.should_receive(:new).with(@session, @response['video'])
+    Riddler::Video.find_by_url(@session, 'http://viddler.com')
+  end
+  
+  it "returns result of Riddler::Video.new" do
+    Riddler::Video.find_by_url(@session, 'http://viddler.com').should == @video
+  end
+end
+
 describe Riddler::Video, ".get_embed_code" do
   before(:each) do
     @response = {'video' => {'embed_code' => 'waldo'}}

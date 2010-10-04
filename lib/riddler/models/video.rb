@@ -31,6 +31,16 @@ module Riddler
       Riddler::VideoList.new(session, response)
     end
     
+    def self.find(session, video_id)
+      response = session.client.get("viddler.videos.getDetails", :video_id => video_id)
+      Riddler::Video.new(session, response['video'])
+    end
+    
+    def self.find_by_url(session, url)
+      response = session.client.get("viddler.videos.getDetails", :url => url)
+      Riddler::Video.new(session, response['video'])
+    end
+    
     def self.get_embed_code(session, video_id, options={})
       response = session.client.get("viddler.videos.getEmbedCode", options.merge(:video_id => video_id))
       response['video']['embed_code']
