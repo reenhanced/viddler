@@ -22,8 +22,6 @@ class MultipartParams #:nodoc:
                                       # Converts array like [['foo', 'bar']] => {'foo' => 'bar'}
                                       a.inject({}) { |h, x| h[x[0]] = x[1]; h }
                                     end
-                                    
-    puts "TEXT", text_params.inspect
     
     pack_hash(text_params, marker+"\r\n") + pack_hash(files_params, marker+"\r\n") + marker + "--"
   end
