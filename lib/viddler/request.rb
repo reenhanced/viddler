@@ -108,7 +108,7 @@ module Viddler
     end
 
     def multipart? #:nodoc:
-      if params.find{|k,v| v.is_a?(File)} then true else false end
+      if params.find{|k,v| v.is_a?(IOStream)} then true else false end
     end
 
     def post? #:nodoc:
