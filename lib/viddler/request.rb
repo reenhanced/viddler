@@ -18,7 +18,7 @@ module Viddler
 
     API_URL = 'http://api.viddler.com/rest/v1/'
     DEFAULT_HEADERS = {:accept => 'application/xml', :content_type => 'application/x-www-form-urlencoded'}
-
+    
     attr_accessor :url, :http_method, :response, :body
     attr_reader :headers, :params
 

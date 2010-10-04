@@ -17,8 +17,13 @@ class MultipartParams #:nodoc:
   
   def pack_params(hash)
     marker = "--#{@boundary_token}"
-    files_params = hash.find_all{|k,v| v.is_a?(File) or v.is_a?(Tempfile)}.to_h
-    text_params = hash - files_params
+    # Partition the hash, then return 2 hashes from the arrays returned.
+    files_params, text_params = hash.partition { |k,v| v.is_a?(File) or v.is_a?(Tempfile) }.map do |a|
+                                      # Converts array like [['foo', 'bar']] => {'foo' => 'bar'}
+                                      a.inject({}) { |h, x| h[x[0]] = x[1]; h }
+                                    end
+                                    
+    puts "TEXT", text_params.inspect
     
     pack_hash(text_params, marker+"\r\n") + pack_hash(files_params, marker+"\r\n") + marker + "--"
   end
