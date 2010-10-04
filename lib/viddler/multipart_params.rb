@@ -17,7 +17,7 @@ class MultipartParams #:nodoc:
   
   def pack_params(hash)
     marker = "--#{@boundary_token}"
-    files_params = hash.find_all{|k,v| v.is_a?(File)}.to_h
+    files_params = hash.find_all{|k,v| v.is_a?(File) or v.is_a?(Tempfile)}.to_h
     text_params = hash - files_params
     
     pack_hash(text_params, marker+"\r\n") + pack_hash(files_params, marker+"\r\n") + marker + "--"
@@ -28,7 +28,7 @@ class MultipartParams #:nodoc:
       marker + case value
       when String, Fixnum
         text_to_multipart(name, value)
-      when File
+      when File, Tempfile
         file_to_multipart(name, value)
       else
         raise "Unexpected #{value.class}: #{value.inspect}"
