@@ -124,7 +124,41 @@ describe Riddler::Video, ".new" do
   end
   
   it "sets files" do
-    pending
+    @video.files.should == [
+      {
+        "id" => "728a0c5f4621e1ee",
+        "status" => "ready",
+        "ext" => "avi",
+        "type" => "video/x-msvideo",
+        "width" => "720",
+        "height" => "480",
+        "size" => "7782400",
+        "url" => "http://www.viddler.com/explore/jhammer/videos/262.avi?vfid=728a0c5f4621e1ee",
+        "html5_video_source" => "",
+        "source" => "1",
+        "flash" => "na",
+        "iphone" =>"na",
+        "ipad" => "na",
+        "itunes" => "na"
+      },
+      {
+        "id" => "728a0c5f4620e1ee",
+        "status" => "ready",
+        "ext" =>"flv",
+        "type" => "video/x-flv",
+        "width" => "640",
+        "height" => "426",
+        "size" => "704696",
+        "url" => "http://www.viddler.com/explore/jhammer/videos/262.flv?vfid=728a0c5f4620e1ee",
+        "html5_video_source" => "",
+        "source" => "0",
+        "flash" => "on",
+        "iphone" => "na",
+        "ipad" => "na",
+        "itunes" => "na",
+        "profile_id" => "1"
+      },
+    ]
   end
 end
 
