@@ -129,7 +129,41 @@ describe Riddler::Video, ".new" do
   end
   
   it "sets files" do
-    pending
+    @video.files.should == [
+      {
+        "id" => "728a0c5f4621e1ee",
+        "status" => "ready",
+        "ext" => "avi",
+        "type" => "video/x-msvideo",
+        "width" => "720",
+        "height" => "480",
+        "size" => "7782400",
+        "url" => "http://www.viddler.com/explore/jhammer/videos/262.avi?vfid=728a0c5f4621e1ee",
+        "html5_video_source" => "",
+        "source" => "1",
+        "flash" => "na",
+        "iphone" =>"na",
+        "ipad" => "na",
+        "itunes" => "na"
+      },
+      {
+        "id" => "728a0c5f4620e1ee",
+        "status" => "ready",
+        "ext" =>"flv",
+        "type" => "video/x-flv",
+        "width" => "640",
+        "height" => "426",
+        "size" => "704696",
+        "url" => "http://www.viddler.com/explore/jhammer/videos/262.flv?vfid=728a0c5f4620e1ee",
+        "html5_video_source" => "",
+        "source" => "0",
+        "flash" => "on",
+        "iphone" => "na",
+        "ipad" => "na",
+        "itunes" => "na",
+        "profile_id" => "1"
+      },
+    ]
   end
 end
 
@@ -228,6 +262,70 @@ describe Riddler::Video, ".find_by_username" do
   
   it "returns result of Riddler::VideoList.new" do
     Riddler::Video.find_by_username(@session, "kyleslat").should == @video_list
+  end
+end
+
+describe Riddler::Video, ".find" do
+  before(:each) do
+    @response = {
+      'video' => {
+        "id" => "d773b049",
+      }
+    }
+    @client = mock(Riddler::Client, :get => @response)
+    @session = mock(Riddler::Session, :client => @client)
+    @video = mock(Riddler::Video)
+    Riddler::Video.stub!(:new).and_return(@video)
+  end
+  
+  it "requires session, video_id" do
+    lambda {Riddler::Video.find}.should raise_error(ArgumentError, /0 for 2/)
+  end
+  
+  it "calls GET viddler.videos.getDetails" do
+    @client.should_receive(:get).with('viddler.videos.getDetails', hash_including(:video_id => '1234'))
+    Riddler::Video.find(@session, '1234')
+  end
+  
+  it "calls Video.new with session and response" do
+    Riddler::Video.should_receive(:new).with(@session, @response['video'])
+    Riddler::Video.find(@session, '1234')
+  end
+  
+  it "returns result of Riddler::Video.new" do
+    Riddler::Video.find(@session, '1234').should == @video
+  end
+end
+
+describe Riddler::Video, ".find_by_url" do
+  before(:each) do
+    @response = {
+      'video' => {
+        "id" => "d773b049",
+      }
+    }
+    @client = mock(Riddler::Client, :get => @response)
+    @session = mock(Riddler::Session, :client => @client)
+    @video = mock(Riddler::Video)
+    Riddler::Video.stub!(:new).and_return(@video)
+  end
+  
+  it "requires session, url" do
+    lambda {Riddler::Video.find_by_url}.should raise_error(ArgumentError, /0 for 2/)
+  end
+  
+  it "calls GET viddler.videos.getDetails" do
+    @client.should_receive(:get).with('viddler.videos.getDetails', hash_including(:url => 'http://viddler.com'))
+    Riddler::Video.find_by_url(@session, 'http://viddler.com')
+  end
+  
+  it "calls Video.new with session and response" do
+    Riddler::Video.should_receive(:new).with(@session, @response['video'])
+    Riddler::Video.find_by_url(@session, 'http://viddler.com')
+  end
+  
+  it "returns result of Riddler::Video.new" do
+    Riddler::Video.find_by_url(@session, 'http://viddler.com').should == @video
   end
 end
 
