@@ -548,3 +548,58 @@ describe Riddler::Playlist, ".destroy" do
     Riddler::Playlist.destroy(@session, "abc123").should be_true
   end
 end
+
+describe Riddler::Playlist, ".find_all_by_username" do
+  before(:each) do
+    @response = {
+      'list_result' => {
+        'page' => '1',
+        'per_page' => '10',
+        'playlists' => [
+          {
+            'id' => 'playlist1',
+            'name' => 'Playlist 1'
+          }, {
+            'id' => 'playlist2',
+            'name' => 'Playlist 2'
+          }
+        ]
+      }
+    }
+    
+    @client = mock(Riddler::Client)
+    @client.stub!(:get).and_return(@response)
+    
+    @session = mock(Riddler::Session, :client => @client)
+    
+    @playlist_list = mock(Riddler::PlaylistList)
+    Riddler::PlaylistList.stub!(:new).and_return(@playlist_list)
+  end
+  
+  it "requires session and username" do
+    lambda {Riddler::Playlist.find_all_by_username}.should raise_error(ArgumentError, /0 for 2/)
+  end
+  
+  it "accepts options" do
+    lambda {Riddler::Playlist.find_all_by_username(@session, 'kyleslat', :page => 2)}.should_not raise_error
+  end
+  
+  it "calls viddler.playlists.getByUser with username" do
+    @client.should_receive(:get).with('viddler.playlists.getByUser', hash_including(:username => 'kyleslat'))
+    Riddler::Playlist.find_all_by_username(@session, 'kyleslat')
+  end
+  
+  it "calls viddler.playlists.getByUser with options, if given" do
+    @client.should_receive(:get).with('viddler.playlists.getByUser', hash_including(:page => 1, :per_page => 10))
+    Riddler::Playlist.find_all_by_username(@session, 'kyleslat', :page => 1, :per_page => 10)
+  end
+  
+  it "calls Riddler::PlaylistList.new with response" do
+    Riddler::PlaylistList.should_receive(:new).with(@session, @response)
+    Riddler::Playlist.find_all_by_username(@session, 'kyleslat', :page => 1, :per_page => 10)
+  end
+  
+  it "returns result of Riddler::PlaylistList.new" do
+    Riddler::Playlist.find_all_by_username(@session, 'kyleslat').should == @playlist_list
+  end
+end

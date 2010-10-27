@@ -22,6 +22,11 @@ module Riddler
       self.new_with_proper_class(session, response)
     end
     
+    def self.find_all_by_username(session, username, options={})
+      response = session.client.get("viddler.playlists.getByUser", {:username => username}.merge(options))
+      Riddler::PlaylistList.new(session, response)
+    end
+    
     def self.add_video(session, playlist_id, video_id, options={})
       response = session.client.post("viddler.playlists.addVideo", {
         :playlist_id => playlist_id,
