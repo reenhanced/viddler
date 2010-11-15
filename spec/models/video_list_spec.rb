@@ -124,3 +124,9 @@ describe Riddler::VideoList, "#each" do
     pending
   end
 end
+
+describe Riddler::VideoList, "#[]" do
+  it "does stuff" do
+    pending
+  end
+end
