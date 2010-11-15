@@ -86,34 +86,14 @@ describe Riddler::VideoList, ".new" do
     @video_list = Riddler::VideoList.new(@session, @response)
   end
   
-  it "should set page" do
-    @video_list.page.should == 2
-  end
-  
-  it "should set per_page" do
-    @video_list.per_page.should == 10
-  end
-  
   it "should contain videos at correct indices" do
-    @video_list[0].should == @video1
-    @video_list[1].should == @video2
+    @video_list[10].should == @video1
+    @video_list[11].should == @video2
   end
   
   it "should call Riddler::Video.new with each video" do
     Riddler::Video.should_receive(:new).with(@session, @video1_response).once
     Riddler::Video.should_receive(:new).with(@session, @video2_response).once
     Riddler::VideoList.new(@session, @response)
-  end
-  
-  it "accepts video list parameter" do
-    lambda {Riddler::VideoList.new(@session, @response, 'video_list')}.should_not raise_error(ArgumentError)
-  end
-  
-  it "uses the video_list parameter to find list of videos" do
-    @response['list_result']['some_crazy_name'] = @response['list_result'].delete('video_list')
-    Riddler::Video.stub!(:new).and_return(@video1, @video2, nil)
-    video_list = Riddler::VideoList.new(@session, @response, 'some_crazy_name')
-    video_list[0].should == @video1
-    video_list[1].should == @video2
   end
 end

@@ -1,13 +1,13 @@
 module Riddler
   class VideoList < Array
-    attr_reader :page, :per_page
-    
-    def initialize(session, response, list_name="video_list")
-      @page     = response["list_result"]["page"].to_i
-      @per_page = response["list_result"]["per_page"].to_i
+    def initialize(session, response)
+      page     = response["list_result"]["page"].to_i
+      per_page = response["list_result"]["per_page"].to_i
       
-      response["list_result"][list_name].each do |vid|
-        self.<< Riddler::Video.new(session, vid)
+      offset   = per_page*(page-1)
+      
+      response['list_result']['video_list'].each_with_index do |vid, i|
+        self[offset+i] = Riddler::Video.new(session, vid)
       end
     end
   end
