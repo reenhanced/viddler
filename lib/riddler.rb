@@ -5,6 +5,7 @@ Bundler.setup
 
 require 'rest-client'
 require 'json'
+require 'active_support'
 
 require 'riddler/client'
 require 'riddler/exceptions'

@@ -1,5 +1,7 @@
 module Riddler
   class User
+    extend ActiveSupport::Memoizable
+    
     TYPES = ['personal', 'partner', 'business']
 
     STRING_ATTRIBUTES = [:username, :first_name, :last_name, :about_me,
@@ -27,8 +29,11 @@ module Riddler
       end
     end
     
-    def videos
-      @videos ||= Riddler::VideoList.new(@session, {}, 'viddler.videos.getByUser', :user => username)
+    def videos(options={})
+      Riddler::VideoList.new(@session, {}, 'viddler.videos.getByUser', {:user => username}.merge(options))
     end
+    
+    memoize :videos
+    
   end
 end
