@@ -104,6 +104,10 @@ describe Riddler::VideoList, ".new" do
   it "sets list_method_options" do
     @video_list.list_method_options.should == {:user => 'kyleslat'}
   end
+  
+  it "sets session" do
+    @video_list.session.should == @session
+  end
 end
 
 describe Riddler::VideoList, "#each" do

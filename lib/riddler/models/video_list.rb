@@ -1,8 +1,9 @@
 module Riddler
   class VideoList < Array
-    attr_accessor :list_method, :list_method_options
+    attr_accessor :list_method, :list_method_options, :session
     
     def initialize(session, response, list_method, list_method_options={})
+      @session             = session
       @list_method         = list_method
       @list_method_options = list_method_options
       
