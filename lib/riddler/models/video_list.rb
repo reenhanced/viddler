@@ -54,9 +54,7 @@ module Riddler
       end
     end
     
-    def slice(start, length=1)
-      self.[](start, length)
-    end
+    alias_method :slice, :[]
     
     private
     
