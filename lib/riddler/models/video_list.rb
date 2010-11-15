@@ -50,6 +50,10 @@ module Riddler
       end
     end
     
+    def slice(start, length=1)
+      self.[](start, length)
+    end
+    
     private
     
     def fetch_page(page)
