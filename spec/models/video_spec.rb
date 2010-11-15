@@ -53,7 +53,12 @@ describe Riddler::Video, ".new" do
           "itunes" => "na",
           "profile_id" => "1"
         },
-      ]
+      ],
+      "permissions" => {
+        "view" => {
+          "level" => "public"
+        }
+      }
     }
     
     @session = mock(Riddler::Session)
@@ -164,6 +169,14 @@ describe Riddler::Video, ".new" do
         "profile_id" => "1"
       },
     ]
+  end
+  
+  it "sets permissions" do
+    @video.permissions.should == {
+      "view" => {
+        "level" => "public"
+      }
+    }
   end
 end
 

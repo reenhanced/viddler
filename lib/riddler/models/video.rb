@@ -7,7 +7,7 @@ module Riddler
     attr_reader :id, :status, :author, :title, :length, :description, :url,
                 :thumbnail_url, :permalink, :html5_video_source, :view_count,
                 :comment_count, :uploaded_at, :made_public_at, :embed_code,
-                :files
+                :files, :permissions
     
     def initialize(session, response)
       @id                 = response["id"]
@@ -27,6 +27,7 @@ module Riddler
       @made_public_at     = Time.at(response["made_public_time"].to_i)
       @embed_code         = response["embed_code"]
       @files              = response["files"]
+      @permissions        = response["permissions"]
     end
     
     def self.find_by_username(session, username, options={})
