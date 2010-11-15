@@ -137,8 +137,8 @@ describe Riddler::Playlist, ".new" do
     @playlist.type.should == "regular"
   end
 
-  it "calls VideoList.new with @session and @response" do
-    Riddler::VideoList.should_receive(:new).with(@session, @response)
+  it "calls VideoList.new with @session, @response, 'viddler.playlists.getDetails', and playlist_id" do
+    Riddler::VideoList.should_receive(:new).with(@session, @response, 'viddler.playlists.getDetails', hash_including(:playlist_id => 'abc123'))
     @playlist = Riddler::Playlist.new(@session, @response)
   end
 

@@ -68,8 +68,6 @@ module Riddler
     end
     
     def populate_from_response!(response)
-      @videos = Riddler::VideoList.new(@session, response)
-      
       return unless response['list_result']
       
       if response['list_result']['playlist']
@@ -78,6 +76,10 @@ module Riddler
         @id   = playlist_attrs['id']
         @name = playlist_attrs['name']
         @type = playlist_attrs['type']
+        
+        @videos = Riddler::VideoList.new(@session, response, 'viddler.playlists.getDetails', {
+          :playlist_id => @id
+        })
       end
     end
   end

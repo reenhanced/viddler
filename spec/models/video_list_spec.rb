@@ -28,7 +28,7 @@ describe Riddler::VideoList, "methods" do
     }
     
     Riddler::Video.stub!(:new)
-    @video_list = Riddler::VideoList.new(@session, @response)
+    @video_list = Riddler::VideoList.new(@session, @response, 'viddler.videos.getByUser')
   end
   
   it "responds to []" do
@@ -83,7 +83,7 @@ describe Riddler::VideoList, ".new" do
     
     @session = mock(Riddler::Session)
     
-    @video_list = Riddler::VideoList.new(@session, @response)
+    @video_list = Riddler::VideoList.new(@session, @response, 'viddler.videos.getByUser', {:user => 'kyleslat'})
   end
   
   it "should contain videos at correct indices" do
@@ -94,6 +94,29 @@ describe Riddler::VideoList, ".new" do
   it "should call Riddler::Video.new with each video" do
     Riddler::Video.should_receive(:new).with(@session, @video1_response).once
     Riddler::Video.should_receive(:new).with(@session, @video2_response).once
-    Riddler::VideoList.new(@session, @response)
+    Riddler::VideoList.new(@session, @response, 'viddler.videos.getByUser')
+  end
+  
+  it "sets list_method" do
+    @video_list.list_method.should == 'viddler.videos.getByUser'
+  end
+  
+  it "sets list_method_options" do
+    @video_list.list_method_options.should == {:user => 'kyleslat'}
+  end
+end
+
+describe Riddler::VideoList, "#each" do
+  before(:each) do
+    @session = mock_session
+    # @video_list = Riddler::VideoList.new(@session)
+  end
+  
+  it "yields all videos" do
+    pending
+  end
+  
+  it "calls API if video doesn't exist yet" do
+    pending
   end
 end

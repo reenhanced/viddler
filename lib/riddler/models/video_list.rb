@@ -1,6 +1,13 @@
 module Riddler
   class VideoList < Array
-    def initialize(session, response)
+    attr_accessor :list_method, :list_method_options
+    
+    def initialize(session, response, list_method, list_method_options={})
+      @list_method         = list_method
+      @list_method_options = list_method_options
+      
+      return if response.empty?
+      
       page     = response["list_result"]["page"].to_i
       per_page = response["list_result"]["per_page"].to_i
       
