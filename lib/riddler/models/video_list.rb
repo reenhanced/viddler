@@ -17,8 +17,6 @@ module Riddler
       keep_going = true
       
       while keep_going
-        fetch_page(i/100+1) if self[i].nil?
-        
         if self[i].nil?
           keep_going = false
         else
