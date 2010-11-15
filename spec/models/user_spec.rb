@@ -209,3 +209,12 @@ describe Riddler::User, "#videos" do
     @user.videos(:page => 10)
   end
 end
+
+describe Riddler::User, "#playlists" do
+  before(:each) do
+    @session = mock_session
+    @user    = Riddler::User.new(@session, 'username' => 'kyleslat')
+  end
+  
+  it "does the same things as VideoList"
+end
