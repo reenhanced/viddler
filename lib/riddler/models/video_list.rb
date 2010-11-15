@@ -43,11 +43,9 @@ module Riddler
       
       length.times do
         fetch_page(i/100+1) if super(i).nil?
-        if super(i).nil?
-          break
-        else
-          arr << super(i) 
-        end
+        break if super(i).nil?
+        
+        arr << super(i) 
         i += 1
       end
       
