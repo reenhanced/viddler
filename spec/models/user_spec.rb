@@ -159,3 +159,48 @@ describe Riddler::User, ".new" do
     end
   end
 end
+
+describe Riddler::User, "#videos" do
+  before(:each) do
+    @session = mock_session
+    
+    @response = {
+      "user" => {
+        "username" => "kyleslat",
+        "first_name" => "Kyle",
+        "last_name" => "Slattery",
+        "about_me" => "Some about me",
+        "avatar" => "http://myavatar.com/image.jpg",
+        "age" => "99",
+        "video_upload_count" => "50",
+        "video_watch_count" => "111",
+        "homepage" => "http://www.viddler.com",
+        "gender" => "m",
+        "company" => "Viddler",
+        "city" => "Bethlehem, PA",
+        "friend_count" => "200",
+        "favourite_video_count" => "1999",
+        "email" => "kyle@viddler.com"
+      }
+    }
+    
+    @user = Riddler::User.new(@session, @response)
+    @video_list = mock(Riddler::VideoList)
+    Riddler::VideoList.stub!(:new).and_return(@video_list)
+  end
+  
+  it "calls Riddler::VideoList.new with proper arguments on first call" do
+    Riddler::VideoList.should_receive(:new).with(@session, {}, 'viddler.videos.getByUser', hash_including(:user => 'kyleslat'))
+    @user.videos
+  end
+  
+  it "does not call VideoList.new on second call" do
+    @user.videos
+    Riddler::VideoList.should_not_receive(:new)
+    @user.videos
+  end
+  
+  it "returns result of Riddler::VideoList.new" do
+    @user.videos.should == @video_list
+  end
+end

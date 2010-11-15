@@ -13,6 +13,8 @@ module Riddler
     attr_accessor :raw_response
 
     def initialize(session, response)
+      @session = session
+      
       response = response['user'] if response['user']
       self.raw_response = response
 
@@ -23,6 +25,10 @@ module Riddler
       INT_ATTRIBUTES.each do |attr|
         instance_variable_set("@#{attr.to_s}", response[attr.to_s].to_i) if response[attr.to_s]
       end
+    end
+    
+    def videos
+      @videos ||= Riddler::VideoList.new(@session, {}, 'viddler.videos.getByUser', :user => username)
     end
   end
 end
