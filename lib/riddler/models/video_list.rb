@@ -12,6 +12,12 @@ module Riddler
       insert_response(response)
     end
     
+    def page(page, options={})
+      options = {:per_page => 10}.merge(options)
+      offset  = options[:per_page]*(page-1)
+      self[offset, options[:per_page]]
+    end
+    
     def each
       i = 0
       keep_going = true

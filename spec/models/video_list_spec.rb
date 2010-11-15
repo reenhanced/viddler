@@ -130,3 +130,44 @@ describe Riddler::VideoList, "#[]" do
     pending
   end
 end
+
+describe Riddler::VideoList, "#page" do
+  before(:each) do
+    @video1_response = {
+      "id" => "video1",
+      "title" => "Video 1"
+    }
+    
+    @video2_response = {
+      "id" => "video2",
+      "title" => "Video 2"
+    }
+    
+    @response = {
+      "list_result" => {
+        "page" => "2",
+        "per_page" => "10",
+        "playlist" => {
+          "id" => "abc123",
+          "name" => "My new playlist",
+          "type" => "regular"
+        },
+        
+        "video_list" => [@video1_response, @video2_response]
+      }
+    }
+    
+    @session = mock_session
+    @video_list = Riddler::VideoList.new(@session, @response, 'viddler.videos.getByUser')
+  end
+  
+  it "calls [] with proper arguments and defaults to :per_page => 10" do
+    @video_list.should_receive(:[]).with(50, 10)
+    @video_list.page(6)
+  end
+  
+  it "calls [] with proper arguments with custom :per_page" do
+    @video_list.should_receive(:[]).with(30,6)
+    @video_list.page(6, :per_page => 6)
+  end
+end
