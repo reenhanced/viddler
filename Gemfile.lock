@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     riddler (0.1.0)
+      activesupport (~> 3.0.0)
       json
       rest-client
 
@@ -9,6 +10,7 @@ GEM
   remote: http://rubygems.org/
   specs:
     ZenTest (4.3.3)
+    activesupport (3.0.1)
     json (1.4.6)
     mime-types (1.16)
     rest-client (1.6.1)
@@ -20,6 +22,7 @@ PLATFORMS
 
 DEPENDENCIES
   ZenTest
+  activesupport (~> 3.0.0)
   json
   rest-client
   riddler!
