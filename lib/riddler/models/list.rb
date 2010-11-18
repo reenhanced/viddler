@@ -38,7 +38,7 @@ module Riddler
       
       i   = start
       arr = []
-      
+
       length.times do
         fetch_page(i/100+1) if super(i).nil?
         break if super(i).nil?
@@ -68,7 +68,7 @@ module Riddler
       
       offset   = per_page*(page-1)
       
-      parse(response).each_with_index do |vid, i|
+      parse_response(response).each_with_index do |vid, i|
         self[offset+i] = vid
       end
     end

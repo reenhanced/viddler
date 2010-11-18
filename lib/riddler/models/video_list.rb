@@ -1,6 +1,6 @@
 module Riddler
   class VideoList < List
-    def parse(response)
+    def parse_response(response)
       arr = []
       
       response['list_result']['video_list'].each do |vid|
