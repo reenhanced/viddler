@@ -12,6 +12,7 @@ require 'riddler/exceptions'
 
 require 'riddler/models/exceptions'
 require 'riddler/models/session'
+require 'riddler/models/list'
 require 'riddler/models/video_list'
 require 'riddler/models/video'
 require 'riddler/models/playlist'
