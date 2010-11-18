@@ -59,5 +59,16 @@ module Riddler
     def fetch_page(page)
       insert_response(session.client.get(list_method, list_method_options.merge(:page => page, :per_page => 100)))
     end
+    
+    def insert_response(response)
+      page     = response["list_result"]["page"].to_i
+      per_page = response["list_result"]["per_page"].to_i
+      
+      offset   = per_page*(page-1)
+      
+      parse(response).each_with_index do |vid, i|
+        self[offset+i] = vid
+      end
+    end
   end
 end

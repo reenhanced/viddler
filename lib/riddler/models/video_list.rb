@@ -8,17 +8,14 @@ module Riddler
       insert_response(response)
     end
     
-    private
-    
-    def insert_response(response)
-      page     = response["list_result"]["page"].to_i
-      per_page = response["list_result"]["per_page"].to_i
+    def parse(response)
+      arr = []
       
-      offset   = per_page*(page-1)
-      
-      response['list_result']['video_list'].each_with_index do |vid, i|
-        self[offset+i] = Riddler::Video.new(session, vid)
+      response['list_result']['video_list'].each do |vid|
+        arr << Riddler::Video.new(session, vid)
       end
+      
+      return arr
     end
   end
 end
