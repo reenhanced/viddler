@@ -47,3 +47,20 @@ describe Riddler::List, "#[]" do
     @list[103]
   end
 end
+
+describe Riddler::List, "#page" do
+  before(:each) do
+    @session = mock_session
+    @list    = Riddler::List.new(@session, {}, 'viddler.something')
+  end
+  
+  it "calls [] with correct offset and length for default per_page=10" do
+    @list.should_receive(:[]).with(20,10)
+    @list.page(3)
+  end
+  
+  it "calls [] with correct offset and length for custom per_page" do
+    @list.should_receive(:[]).with(24,12)
+    @list.page(3, :per_page => 12)
+  end
+end
