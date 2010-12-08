@@ -268,8 +268,8 @@ describe Riddler::Video, ".find_by_username" do
     Riddler::Video.find_by_username(@session, 'kyleslat', :a => "b")
   end
   
-  it "calls VideoList.new with response" do
-    Riddler::VideoList.should_receive(:new).with(@session, @response)
+  it "calls VideoList.new with response, method, and username" do
+    Riddler::VideoList.should_receive(:new).with(@session, @response, 'viddler.videos.getByUser', :user => 'kyleslat')
     Riddler::Video.find_by_username(@session, "kyleslat")
   end
   

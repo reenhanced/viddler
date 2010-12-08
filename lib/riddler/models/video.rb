@@ -32,7 +32,7 @@ module Riddler
     
     def self.find_by_username(session, username, options={})
       response = session.client.get("viddler.videos.getByUser", options.merge(:user => username))
-      Riddler::VideoList.new(session, response)
+      Riddler::VideoList.new(session, response, 'viddler.videos.getByUser', :user => username)
     end
     
     def self.find(session, video_id)
