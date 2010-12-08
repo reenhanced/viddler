@@ -16,7 +16,7 @@ module Riddler
       self[offset, options[:per_page]]
     end
     
-    def each
+    def all
       i = 0
       keep_going = true
       

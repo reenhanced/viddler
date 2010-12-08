@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe Riddler::List, "#each" do
+describe Riddler::List, "#all" do
   before(:each) do
     @session = mock_session
     @list    = Riddler::List.new(@session, {}, 'viddler.something')
@@ -13,7 +13,7 @@ describe Riddler::List, "#each" do
   
   it "should iterate over all elements" do
     arr = []
-    @list.each{|item| arr << item}
+    @list.all{|item| arr << item}
     
     arr.should == [1,2,3,4,5]
   end
