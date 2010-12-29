@@ -308,6 +308,15 @@ describe Riddler::Video, ".find" do
   it "returns result of Riddler::Video.new" do
     Riddler::Video.find(@session, '1234').should == @video
   end
+  
+  it "accepts options" do
+    lambda {Riddler::Video.find(@session, '1234', :add_embed_code => true)}.should_not raise_error
+  end
+  
+  it "passes options" do
+    @client.should_receive(:get).with(anything, hash_including(:add_embed_code => true))
+    Riddler::Video.find(@session, '1234', :add_embed_code => true)
+  end
 end
 
 describe Riddler::Video, ".find_by_url" do
