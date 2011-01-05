@@ -18,8 +18,8 @@ module Riddler
       
       offset   = per_page*(page-1)
       
-      parse_response(response).each_with_index do |vid, i|
-        self[offset+i] = vid
+      parse_response(response).each do |vid|
+        self << vid
       end
     end
   end

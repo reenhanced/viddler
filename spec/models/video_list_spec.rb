@@ -87,8 +87,8 @@ describe Riddler::VideoList, ".new" do
   end
   
   it "should contain videos at correct indices" do
-    @video_list[10].should == @video1
-    @video_list[11].should == @video2
+    @video_list[0].should == @video1
+    @video_list[1].should == @video2
   end
   
   it "should call Riddler::Video.new with each video" do
