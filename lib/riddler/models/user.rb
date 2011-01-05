@@ -30,7 +30,15 @@ module Riddler
     end
     
     def videos(options={})
-      Riddler::VideoList.new(@session, {}, 'viddler.videos.getByUser', {:user => username}.merge(options))
+      if options[:page]
+        videos = @session.client.get 'viddler.videos.getByUser', options.merge(:user => username)
+        options.delete(:page)
+        options.delete(:per_page)
+      else
+        videos = {}
+      end
+      
+      Riddler::VideoList.new(@session, videos, 'viddler.videos.getByUser', {:user => username}.merge(options))
     end
     
     memoize :videos

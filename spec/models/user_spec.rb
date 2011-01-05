@@ -205,9 +205,11 @@ describe Riddler::User, "#videos" do
   end
   
   it "passes any options along" do
-    Riddler::VideoList.should_receive(:new).with(anything, anything, anything, hash_including(:page => 10))
-    @user.videos(:page => 10)
+    Riddler::VideoList.should_receive(:new).with(anything, anything, anything, hash_including(:pageasdf => 10))
+    @user.videos(:pageasdf => 10)
   end
+  
+  it "prepopulates if page is given"
 end
 
 describe Riddler::User, "#playlists" do
