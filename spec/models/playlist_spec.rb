@@ -302,6 +302,67 @@ describe Riddler::Playlist, ".find" do
   end
 end
 
+describe Riddler::Playlist, ".set" do
+  before(:each) do
+    @video1_response = {
+      "id" => "video1",
+      "title" => "Video 1"
+    }
+  
+    @video2_response = {
+      "id" => "video2",
+      "title" => "Video 2"
+    }
+  
+    @response = {
+      "list_result" => {
+        "page" => "1",
+        "per_page" => "10",
+        "playlist" => {
+          "id" => "abc123",
+          "name" => "My new playlist",
+          "type" => "Regular"
+        },
+      
+        "videos_list" => [@video1_response, @video2_response]
+      }
+    }
+    
+    @client = mock(Riddler::Client)
+    @client.stub!(:post).and_return(@response)
+    
+    @session = mock(Riddler::Session)
+    @session.stub!(:client).and_return(@client)
+    
+    @playlist = mock(Riddler::Playlist)
+    Riddler::Playlist.stub!(:new).and_return(@playlist)
+    
+    @regular_playlist = mock(Riddler::RegularPlaylist)
+    Riddler::RegularPlaylist.stub!(:new).and_return(@regular_playlist)
+    
+    @smart_playlist = mock(Riddler::SmartPlaylist)
+    Riddler::SmartPlaylist.stub!(:new).and_return(@smart_playlist)
+  end
+  
+  it "requires session and id" do
+    lambda {Riddler::Playlist.set}.should raise_error(ArgumentError, /0 for 2/)
+  end
+    
+  it "calls viddler.playlists.setDetails with id" do
+    @client.should_receive(:post).with('viddler.playlists.setDetails', hash_including(:playlist_id => "abc123"))
+    Riddler::Playlist.set(@session, "abc123")
+  end
+  
+  it "accepts options" do
+    lambda {Riddler::Playlist.set(@session, "abc123", {:a => :b})}.should_not raise_error
+  end
+  
+  it "includes options if specified" do
+    @client.should_receive(:post).with(anything, hash_including({:a => "b"}))
+    Riddler::Playlist.set(@session, "abc123", :a => "b")
+  end
+end
+
 describe Riddler::Playlist, ".move_video" do
   before(:each) do
     @video1_response = {

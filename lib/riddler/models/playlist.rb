@@ -22,6 +22,11 @@ module Riddler
       self.new_with_proper_class(session, response)
     end
     
+    def self.set(session, id, options={})
+      response = session.client.post("viddler.playlists.setDetails", {:playlist_id => id}.merge(options))
+      self.new_with_proper_class(session, response)
+    end
+    
     def self.find_all_by_username(session, username, options={})
       response = session.client.get("viddler.playlists.getByUser", {:username => username}.merge(options))
       Riddler::PlaylistList.new(session, response)
