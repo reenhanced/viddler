@@ -278,6 +278,44 @@ describe Riddler::Video, ".find_by_username" do
   end
 end
 
+describe Riddler::Video, ".find_by_tag" do
+  before(:each) do
+    @response = {'a' => 'b'}
+    @client   = mock(Riddler::Client, :get => @response)
+    @session  = mock(Riddler::Session, :client => @client)
+    
+    @video_list = mock(Riddler::VideoList)
+    Riddler::VideoList.stub!(:new).and_return(@video_list)
+  end
+  
+  it "requires session, tag" do
+    lambda {Riddler::Video.find_by_username}.should raise_error(ArgumentError, /0 for 2/)
+  end
+  
+  it "calls GET viddler.videos.getByTag" do
+    @client.should_receive(:get).with('viddler.videos.getByTag', hash_including(:tag => "shopping"))
+    Riddler::Video.find_by_tag(@session, 'shopping')
+  end
+  
+  it "accepts options" do
+    lambda {Riddler::Video.find_by_tag(@session, 'shopping', :per_page => 10)}.should_not raise_error
+  end
+  
+  it "passes options to GET" do
+    @client.should_receive(:get).with(anything, hash_including(:a => "b"))
+    Riddler::Video.find_by_tag(@session, 'shopping', :a => "b")
+  end
+  
+  it "calls VideoList.new with response, method, and username" do
+    Riddler::VideoList.should_receive(:new).with(@session, @response, 'viddler.videos.getByTag', :tag => 'shopping')
+    Riddler::Video.find_by_tag(@session, "shopping")
+  end
+  
+  it "returns result of Riddler::VideoList.new" do
+    Riddler::Video.find_by_tag(@session, "shopping").should == @video_list
+  end
+end
+
 describe Riddler::Video, ".find" do
   before(:each) do
     @response = {
