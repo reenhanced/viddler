@@ -18,7 +18,4 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activesupport (>= 3.0.0.rc)
-  mime-types
-  rest-client
   viddler!
