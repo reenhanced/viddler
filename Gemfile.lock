@@ -1,0 +1,24 @@
+PATH
+  remote: .
+  specs:
+    viddler (0.3.4)
+      activesupport (>= 3.0.0.rc)
+      mime-types
+      rest-client
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    activesupport (3.0.0.rc)
+    mime-types (1.16)
+    rest-client (1.6.0)
+      mime-types (>= 1.16)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  activesupport (>= 3.0.0.rc)
+  mime-types
+  rest-client
+  viddler!
